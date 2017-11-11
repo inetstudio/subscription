@@ -1,0 +1,25 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateSubscriptionTables extends Migration
+{
+    public function up()
+    {
+        Schema::create('subscription', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('email');
+            $table->boolean('is_subscribed')->default(0);
+            $table->string('user_id')->default(0);
+            $table->json('additional_info');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    public function down()
+    {
+        Schema::drop('subscription');
+    }
+}

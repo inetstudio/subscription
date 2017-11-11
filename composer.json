@@ -1,0 +1,30 @@
+{
+    "name": "inetstudio/subscription",
+    "description": "Package for subscription",
+    "homepage": "https://github.com/inetstudio/subscription",
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "Konstantin Bukin",
+        "email": "bukin@inetstudio.ru"
+      }
+    ],
+    "require": {
+      "php" : "^7.1",
+      "drewm/mailchimp-api": "^2.4",
+      "inetstudio/admin-panel": "1.5.*",
+      "mailgun/mailgun-php": "^2.3"
+    },
+    "autoload": {
+      "psr-4": {
+        "InetStudio\\Subscription\\": "src/"
+      }
+    },
+    "extra": {
+      "laravel": {
+        "providers": [
+          "InetStudio\\Subscription\\Providers\\SubscriptionServiceProvider"
+        ]
+      }
+    }
+}
