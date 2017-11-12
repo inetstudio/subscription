@@ -3,7 +3,7 @@
 namespace InetStudio\Subscription\Observers;
 
 use InetStudio\Subscription\Models\SubscriptionModel;
-use InetStudio\Subscription\Contracts\SubscriptionServiceContact;
+use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
 
 class SubscriptionObserver
 {
@@ -11,9 +11,9 @@ class SubscriptionObserver
 
     /**
      * SubscriptionObserver constructor.
-     * @param SubscriptionServiceContact $subscriptionService
+     * @param SubscriptionServiceContract $subscriptionService
      */
-    public function __construct(SubscriptionServiceContact $subscriptionService)
+    public function __construct(SubscriptionServiceContract $subscriptionService)
     {
         $this->subscriptionService = $subscriptionService;
     }

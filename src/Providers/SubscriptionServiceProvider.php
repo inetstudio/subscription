@@ -2,12 +2,12 @@
 
 namespace InetStudio\Subscription\Providers;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\ServiceProvider;
 use InetStudio\Subscription\Models\SubscriptionModel;
+use InetStudio\Subscription\Managers\SubscriptionManager;
 use InetStudio\Subscription\Console\Commands\SetupCommand;
 use InetStudio\Subscription\Observers\SubscriptionObserver;
-use InetStudio\Subscription\Contracts\SubscriptionServiceContact;
+use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
 
 class SubscriptionServiceProvider extends ServiceProvider
 {
@@ -103,14 +103,10 @@ class SubscriptionServiceProvider extends ServiceProvider
      */
     public function registerBindings()
     {
-        $availableDrivers = ['mailchimp', 'mailgun', 'mindbox', 'local'];
-        $configDriver = config('subscription.driver');
+        $driver = config('subscription.driver');
 
-        $driver = (in_array($configDriver, $availableDrivers)) ? $configDriver : 'local';
-
-        $this->app->bind(
-            SubscriptionServiceContact::class,
-            'InetStudio\Subscription\Services\\'.Str::ucfirst($driver).'Service'
-        );
+        $this->app->singleton(SubscriptionServiceContract::class, function ($app) use ($driver) {
+            return (new SubscriptionManager($app))->with($driver);
+        });
     }
 }

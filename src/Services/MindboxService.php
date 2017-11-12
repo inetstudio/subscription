@@ -4,9 +4,9 @@ namespace InetStudio\Subscription\Services;
 
 use GuzzleHttp\Client;
 use InetStudio\Subscription\Models\SubscriptionModel;
-use InetStudio\Subscription\Contracts\SubscriptionServiceContact;
+use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
 
-class MindboxService implements SubscriptionServiceContact
+class MindboxService implements SubscriptionServiceContract
 {
     private $secret;
     private $url;
@@ -14,15 +14,19 @@ class MindboxService implements SubscriptionServiceContact
     private $point;
     private $userIP;
 
-    public function __construct()
+    /**
+     * MindboxService constructor.
+     * @param array $config
+     */
+    public function __construct(array $config)
     {
         $request = request();
         $deviceUUID = $_COOKIE['mindboxDeviceUUID'];
 
-        $this->secret = config('subscription.mindbox.secret');
-        $this->brand = config('subscription.mindbox.brand');
-        $this->point = config('subscription.mindbox.point');
-        $this->url = config('subscription.mindbox.url').$deviceUUID;
+        $this->secret = $config['secret'];
+        $this->brand = $config['brand'];
+        $this->point = $config['point'];
+        $this->url = $config['url'].$deviceUUID;
         $this->userIP = $request->ip();
     }
 

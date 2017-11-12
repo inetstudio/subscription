@@ -4,20 +4,21 @@ namespace InetStudio\Subscription\Services;
 
 use Mailgun\Mailgun;
 use InetStudio\Subscription\Models\SubscriptionModel;
-use InetStudio\Subscription\Contracts\SubscriptionServiceContact;
+use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
 
-class MailgunService implements SubscriptionServiceContact
+class MailgunService implements SubscriptionServiceContract
 {
     private $service;
     private $subscriptionList;
 
     /**
-     * MailchimpService constructor.
+     * MailgunService constructor.
+     * @param array $config
      */
-    public function __construct()
+    public function __construct(array $config)
     {
-        $this->service = new Mailgun('subscription.mailgun.api_key');
-        $this->subscriptionList = config('subscription.mailgun.subscribers_list');
+        $this->service = new Mailgun($config['api_key']);
+        $this->subscriptionList = $config['subscribers_list'];
     }
 
     /**

@@ -4,20 +4,21 @@ namespace InetStudio\Subscription\Services;
 
 use DrewM\MailChimp\MailChimp;
 use InetStudio\Subscription\Models\SubscriptionModel;
-use InetStudio\Subscription\Contracts\SubscriptionServiceContact;
+use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
 
-class MailchimpService implements SubscriptionServiceContact
+class MailchimpService implements SubscriptionServiceContract
 {
     private $service;
     private $subscriptionList;
 
     /**
      * MailchimpService constructor.
+     * @param array $config
      */
-    public function __construct()
+    public function __construct(array $config)
     {
-        $this->service = new MailChimp(config('subscription.mailchimp.api_key'));
-        $this->subscriptionList = config('subscription.mailchimp.subscribers_list');
+        $this->service = new MailChimp($config['api_key']);
+        $this->subscriptionList = $config['subscribers_list'];
     }
 
     /**

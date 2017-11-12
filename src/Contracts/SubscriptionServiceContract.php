@@ -4,7 +4,7 @@ namespace InetStudio\Subscription\Contracts;
 
 use InetStudio\Subscription\Models\SubscriptionModel;
 
-interface SubscriptionServiceContact
+interface SubscriptionServiceContract
 {
     /**
      * Подписываем пользователя на рассылку.

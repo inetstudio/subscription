@@ -3,9 +3,9 @@
 namespace InetStudio\Subscription\Services;
 
 use InetStudio\Subscription\Models\SubscriptionModel;
-use InetStudio\Subscription\Contracts\SubscriptionServiceContact;
+use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
 
-class LocalService implements SubscriptionServiceContact
+class LocalService implements SubscriptionServiceContract
 {
     /**
      * Подписываем пользователя на рассылку.
