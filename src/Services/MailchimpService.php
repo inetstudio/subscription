@@ -11,6 +11,7 @@ class MailchimpService implements SubscriptionServiceContract
 {
     private $service;
     private $subscriptionList;
+    private $userData = ['merge_fields', 'interests'];
 
     /**
      * MailchimpService constructor.
@@ -114,16 +115,10 @@ class MailchimpService implements SubscriptionServiceContract
     {
         $additionalData = $this->getAdditionalInfo($subscription);
 
-        $options = [
+        $options = array_merge([
             'email_address' => $subscription->email,
             'status' => 'pending',
-        ];
-
-        if (count($additionalData) > 0) {
-            $options = array_merge($options, [
-                'merge_fields' => $additionalData,
-            ]);
-        }
+        ], $additionalData);
 
         $this->service->post('lists/'.$this->subscriptionList.'/members', $options);
 
@@ -143,31 +138,14 @@ class MailchimpService implements SubscriptionServiceContract
 
         $subscriberHash = $this->service->subscriberHash($subscription->email);
 
-        $options = [
+        $options = array_merge([
             'email_address' => $subscription->email,
             'status' => $status,
-        ];
-
-        if (count($additionalData) > 0) {
-            $options = array_merge($options, [
-                'merge_fields' => $additionalData,
-            ]);
-        }
+        ], $additionalData);
 
         $this->service->patch('lists/'.$this->subscriptionList.'/members/'.$subscriberHash, $options);
 
         return true;
-    }
-
-    /**
-     * Получаем дополнительные данные пользователя.
-     *
-     * @param SubscriptionModel $subscription
-     * @return array
-     */
-    private function getAdditionalInfo(SubscriptionModel $subscription): array
-    {
-        return array_change_key_case($subscription->additional_info, CASE_UPPER);
     }
 
     /**
@@ -179,5 +157,28 @@ class MailchimpService implements SubscriptionServiceContract
     public function sync(Request $request): bool
     {
         return true;
+    }
+
+    /**
+     * Получаем дополнительные данные пользователя.
+     *
+     * @param SubscriptionModel $subscription
+     * @return array
+     */
+    private function getAdditionalInfo(SubscriptionModel $subscription): array
+    {
+        $additionalData = $subscription->additional_info;
+
+        $data = [];
+
+        foreach ($this->userData as $option) {
+            if (isset($additionalData[$option]) && count($additionalData[$option]) > 0) {
+                $data = array_merge($data, [
+                    $option => $additionalData[$option],
+                ]);
+            }
+        }
+
+        return $data;
     }
 }
