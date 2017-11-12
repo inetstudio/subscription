@@ -18,7 +18,6 @@ class SubscriptionServiceProvider extends ServiceProvider
         $this->registerRoutes();
         $this->registerViews();
         $this->registerObservers();
-        $this->registerBindings();
     }
 
     /**
@@ -28,7 +27,7 @@ class SubscriptionServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
+        $this->registerBindings();
     }
 
     /**

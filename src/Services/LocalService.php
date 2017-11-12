@@ -2,6 +2,7 @@
 
 namespace InetStudio\Subscription\Services;
 
+use Illuminate\Http\Request;
 use InetStudio\Subscription\Models\SubscriptionModel;
 use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
 
@@ -13,7 +14,7 @@ class LocalService implements SubscriptionServiceContract
      * @param SubscriptionModel $subscription
      * @return bool
      */
-    public function subscribe(SubscriptionModel $subscription)
+    public function subscribe(SubscriptionModel $subscription): bool
     {
         return true;
     }
@@ -24,7 +25,7 @@ class LocalService implements SubscriptionServiceContract
      * @param SubscriptionModel $subscription
      * @return bool
      */
-    public function update(SubscriptionModel $subscription)
+    public function update(SubscriptionModel $subscription): bool
     {
         return true;
     }
@@ -35,7 +36,18 @@ class LocalService implements SubscriptionServiceContract
      * @param SubscriptionModel $subscription
      * @return bool
      */
-    public function unsubscribe(SubscriptionModel $subscription)
+    public function unsubscribe(SubscriptionModel $subscription): bool
+    {
+        return true;
+    }
+
+    /**
+     * Синхронизируем локальные данные с сервисом подписок.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public function sync(Request $request): bool
     {
         return true;
     }

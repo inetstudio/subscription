@@ -2,6 +2,7 @@
 
 namespace InetStudio\Subscription\Services;
 
+use Illuminate\Http\Request;
 use DrewM\MailChimp\MailChimp;
 use InetStudio\Subscription\Models\SubscriptionModel;
 use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
@@ -167,5 +168,16 @@ class MailchimpService implements SubscriptionServiceContract
     private function getAdditionalInfo(SubscriptionModel $subscription): array
     {
         return array_change_key_case($subscription->additional_info, CASE_UPPER);
+    }
+
+    /**
+     * Синхронизируем локальные данные с сервисом подписок.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    public function sync(Request $request): bool
+    {
+        return true;
     }
 }

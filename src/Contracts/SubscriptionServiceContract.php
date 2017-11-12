@@ -2,6 +2,7 @@
 
 namespace InetStudio\Subscription\Contracts;
 
+use Illuminate\Http\Request;
 use InetStudio\Subscription\Models\SubscriptionModel;
 
 interface SubscriptionServiceContract
@@ -29,4 +30,12 @@ interface SubscriptionServiceContract
      * @return mixed
      */
     public function unsubscribe(SubscriptionModel $subscription);
+
+    /**
+     * Синхронизируем локальные данные с сервисом подписок.
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function sync(Request $request);
 }

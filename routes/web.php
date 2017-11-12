@@ -9,4 +9,8 @@ Route::group(['namespace' => 'InetStudio\Subscription\Http\Controllers\Back'], f
             ], 'as' => 'back']);
         });
     });
+
+    Route::group(['namespace' => 'InetStudio\Subscription\Http\Controllers\Front'], function () {
+        Route::post('module/subscription/sync/{service}', 'SubscriptionController@sync');
+    });
 });
