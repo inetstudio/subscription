@@ -43,11 +43,11 @@ return [
      * mailchimp / mailgun / mindbox / local
      */
 
-    'driver' => 'local',
+    'driver' => env('SUBSCRIPTION_DRIVER', 'local'),
 
     'mailchimp' => [
-        'api_key' => '',
-        'subscribers_list' => '',
+        'api_key' => env('SUBSCRIPTION_MAILCHIMP_API_KEY'),
+        'subscribers_list' => env('SUBSCRIPTION_MAILCHIMP_SUBSCRIBERS_LIST'),
     ],
 
     'mailgun' => [

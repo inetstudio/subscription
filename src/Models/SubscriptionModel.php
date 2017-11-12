@@ -25,7 +25,7 @@ class SubscriptionModel extends Model
      * @var array
      */
     protected $fillable = [
-        'email', 'is_subscribed', 'user_id',
+        'email', 'is_subscribed', 'user_id', 'additional_info',
     ];
 
     /**

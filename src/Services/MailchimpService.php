@@ -26,15 +26,11 @@ class MailchimpService implements SubscriptionServiceContact
      * @param SubscriptionModel $subscription
      * @return bool
      */
-    public function subscribe(SubscriptionModel $subscription)
+    public function subscribe(SubscriptionModel $subscription): bool
     {
         $exist = $this->checkUser($subscription->email);
 
-        if (! $exist) {
-            $this->addUser($subscription);
-        } else {
-            $this->updateUser($subscription);
-        }
+        $this->caseAction($subscription, $exist);
 
         return true;
     }
@@ -45,17 +41,13 @@ class MailchimpService implements SubscriptionServiceContact
      * @param SubscriptionModel $subscription
      * @return bool
      */
-    public function update(SubscriptionModel $subscription)
+    public function update(SubscriptionModel $subscription): bool
     {
         $original = $subscription->getOriginal();
 
         $exist = $this->checkUser($original['email']);
 
-        if (! $exist) {
-            $this->addUser($subscription);
-        } else {
-            $this->updateUser($subscription);
-        }
+        $this->caseAction($subscription, $exist);
 
         return true;
     }
@@ -66,7 +58,7 @@ class MailchimpService implements SubscriptionServiceContact
      * @param SubscriptionModel $subscription
      * @return bool
      */
-    public function unsubscribe(SubscriptionModel $subscription)
+    public function unsubscribe(SubscriptionModel $subscription): bool
     {
         $subscriberHash = $this->service->subscriberHash($subscription->email);
 
@@ -87,7 +79,7 @@ class MailchimpService implements SubscriptionServiceContact
      * @param string $email
      * @return bool
      */
-    private function checkUser(string $email)
+    private function checkUser(string $email): bool
     {
         $subscriberHash = $this->service->subscriberHash($email);
         $checkUserExist = $this->service->get('lists/'.$this->subscriptionList.'/members/'.$subscriberHash, []);
@@ -96,20 +88,42 @@ class MailchimpService implements SubscriptionServiceContact
     }
 
     /**
+     * Выбираем, что делать с пользователем.
+     *
+     * @param SubscriptionModel $subscription
+     * @param $exist
+     */
+    private function caseAction(SubscriptionModel $subscription, $exist): void
+    {
+        if (! $exist) {
+            $this->addUser($subscription);
+        } else {
+            $this->updateUser($subscription);
+        }
+    }
+
+    /**
      * Добавляем пользователя в лист.
      *
      * @param SubscriptionModel $subscription
      * @return bool
      */
-    private function addUser(SubscriptionModel $subscription)
+    private function addUser(SubscriptionModel $subscription): bool
     {
         $additionalData = $this->getAdditionalInfo($subscription);
 
-        $this->service->post('lists/'.$this->subscriptionList.'/members', [
+        $options = [
             'email_address' => $subscription->email,
-            'merge_fields' => $additionalData,
             'status' => 'pending',
-        ]);
+        ];
+
+        if (count($additionalData) > 0) {
+            $options = array_merge($options, [
+                'merge_fields' => $additionalData,
+            ]);
+        }
+
+        $this->service->post('lists/'.$this->subscriptionList.'/members', $options);
 
         return true;
     }
@@ -120,18 +134,25 @@ class MailchimpService implements SubscriptionServiceContact
      * @param SubscriptionModel $subscription
      * @return bool
      */
-    private function updateUser(SubscriptionModel $subscription)
+    private function updateUser(SubscriptionModel $subscription): bool
     {
         $additionalData = $this->getAdditionalInfo($subscription);
         $status = ($subscription->is_subscribed == 0) ? 'unsubscribed' : 'subscribed';
 
         $subscriberHash = $this->service->subscriberHash($subscription->email);
 
-        $this->service->patch('lists/'.$this->subscriptionList.'/members/'.$subscriberHash, [
+        $options = [
             'email_address' => $subscription->email,
-            'merge_fields' => $additionalData,
-            'status' => $status
-        ]);
+            'status' => $status,
+        ];
+
+        if (count($additionalData) > 0) {
+            $options = array_merge($options, [
+                'merge_fields' => $additionalData,
+            ]);
+        }
+
+        $this->service->patch('lists/'.$this->subscriptionList.'/members/'.$subscriberHash, $options);
 
         return true;
     }
@@ -142,7 +163,7 @@ class MailchimpService implements SubscriptionServiceContact
      * @param SubscriptionModel $subscription
      * @return array
      */
-    private function getAdditionalInfo(SubscriptionModel $subscription)
+    private function getAdditionalInfo(SubscriptionModel $subscription): array
     {
         return array_change_key_case($subscription->additional_info, CASE_UPPER);
     }
