@@ -90,10 +90,9 @@ class MailchimpService implements SubscriptionServiceContract
      */
     private function checkUser(string $email): bool
     {
-        $subscriberHash = $this->service->subscriberHash($email);
-        $checkUserExist = $this->service->get('lists/'.$this->subscriptionList.'/members/'.$subscriberHash, []);
+        $user = $this->getUser($email);
 
-        return (isset($checkUserExist['id'])) ? true : false;
+        return (isset($user['id'])) ? true : false;
     }
 
     /**
@@ -162,7 +161,41 @@ class MailchimpService implements SubscriptionServiceContract
      */
     public function sync(Request $request): bool
     {
+        $email = $request->input('data.email');
+
+        if ($email) {
+            $user = $this->getUser($email);
+
+            if (isset($user['id'])) {
+                $subscribers = SubscriptionModel::where('email', $email)->get();
+
+                if ($subscribers->count() > 0) {
+                    $subscriber = $subscribers->first();
+
+                    $subscriber->flushEventListeners();
+
+                    $subscriber->email = (isset($user['email'])) ? $user['email'] : $subscriber->email;
+                    $subscriber->is_subscribed = (isset($user['status']) && $user['status'] == 'subscribed') ? 1 : 0;
+                    $subscriber->additional_info = $this->formatAdditionalInfo($user);
+                    $subscriber->save();
+                }
+            }
+        }
+
         return true;
+    }
+
+    /**
+     * Возвращаем пользователя из Mailchimp.
+     *
+     * @param string $email
+     * @return array
+     */
+    private function getUser(string $email): array
+    {
+        $subscriberHash = $this->service->subscriberHash('email');
+
+        return $this->service->get('lists/'.$this->subscriptionList.'/members/'.$subscriberHash, []);
     }
 
     /**
@@ -218,6 +251,60 @@ class MailchimpService implements SubscriptionServiceContract
         }
 
         return $prepareData;
+    }
+
+    /**
+     * Получаем дополнительную информацию по пользователю Mailchimp.
+     *
+     * @param array $user
+     * @return array
+     */
+    private function formatAdditionalInfo(array $user): array
+    {
+        $data = [];
+
+        foreach ($this->userData as $key => $option) {
+            if (isset($user[$option]) && count($user[$option]) > 0) {
+                $method = 'format'.Str::studly($key).'Info';
+
+                $data = array_merge($data, [
+                    $key => $this->$method($user[$option]),
+                ]);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Подготавливаем персональные данные.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function formatPersonalInfo(array $data): array
+    {
+        return $data;
+    }
+
+    /**
+     * Подготавливаем данные по группам.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function formatGroupsInfo(array $data): array
+    {
+        $formatData = [];
+
+        foreach ($data as $key => $value) {
+            $groupName = array_search($key, $this->interests);
+            if ($groupName) {
+                $formatData[$groupName] = $value;
+            }
+        }
+
+        return $formatData;
     }
 
     /**
