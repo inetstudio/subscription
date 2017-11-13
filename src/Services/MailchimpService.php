@@ -2,6 +2,7 @@
 
 namespace InetStudio\Subscription\Services;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use DrewM\MailChimp\MailChimp;
 use InetStudio\Subscription\Models\SubscriptionModel;
@@ -11,7 +12,11 @@ class MailchimpService implements SubscriptionServiceContract
 {
     private $service;
     private $subscriptionList;
-    private $userData = ['merge_fields', 'interests'];
+    private $interests;
+    private $userData = [
+        'personal' => 'merge_fields',
+        'groups' => 'interests',
+    ];
 
     /**
      * MailchimpService constructor.
@@ -21,6 +26,7 @@ class MailchimpService implements SubscriptionServiceContract
     {
         $this->service = new MailChimp($config['api_key']);
         $this->subscriptionList = $config['subscribers_list'];
+        $this->interests = $this->array_change_key_case_unicode($config['interests'], CASE_LOWER);
     }
 
     /**
@@ -171,14 +177,66 @@ class MailchimpService implements SubscriptionServiceContract
 
         $data = [];
 
-        foreach ($this->userData as $option) {
-            if (isset($additionalData[$option]) && count($additionalData[$option]) > 0) {
+        foreach ($this->userData as $key => $option) {
+            if (isset($additionalData[$key]) && count($additionalData[$key]) > 0) {
+                $method = 'prepare'.Str::studly($key).'Info';
+
                 $data = array_merge($data, [
-                    $option => $additionalData[$option],
+                    $option => $this->$method($additionalData[$key]),
                 ]);
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Подготавливаем персональные данные.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function preparePersonalInfo(array $data): array
+    {
+        return $data;
+    }
+
+    /**
+     * Подготавливаем данные по группам.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareGroupsInfo(array $data): array
+    {
+        $data = $this->array_change_key_case_unicode($data, CASE_LOWER);
+
+        $prepareData = [];
+
+        foreach ($this->interests as $key => $id) {
+            $prepareData[$id] = (isset($data[$key])) ? true : false;
+        }
+
+        return $prepareData;
+    }
+
+    /**
+     * Смена регистра ключей в массиве с поддержкой юникода.
+     *
+     * @param array $arr
+     * @param int $case
+     * @return array
+     */
+    private function array_change_key_case_unicode(array $arr, int $case = CASE_LOWER): array
+    {
+        $case = ($case == CASE_LOWER) ? MB_CASE_LOWER : MB_CASE_UPPER;
+
+        $returnArray = [];
+
+        foreach ($arr as $key => $value) {
+            $returnArray[mb_convert_case($key, $case, 'UTF-8')] = $value;
+        }
+
+        return $returnArray;
     }
 }

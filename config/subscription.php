@@ -48,6 +48,7 @@ return [
     'mailchimp' => [
         'api_key' => env('SUBSCRIPTION_MAILCHIMP_API_KEY'),
         'subscribers_list' => env('SUBSCRIPTION_MAILCHIMP_SUBSCRIBERS_LIST'),
+        'interests' => json_decode(env('SUBSCRIPTION_MAILCHIMP_INTERESTS', '{}'), true),
     ],
 
     'mailgun' => [
