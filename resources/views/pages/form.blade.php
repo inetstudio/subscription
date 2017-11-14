@@ -49,22 +49,7 @@
                                         <label for="message" class="col-sm-2 control-label">Дополнительная информация</label>
 
                                         <div class="col-sm-10">
-                                            <table class="table table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Параметр</th>
-                                                        <th>Значение</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($item->additional_info as $key => $value)
-                                                        <tr>
-                                                            <td>{{ $key }}</td>
-                                                            <td>{{ $value }}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
+                                            <pre class="json-data">@json($item->additional_info)</pre>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>

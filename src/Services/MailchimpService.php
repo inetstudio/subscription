@@ -302,7 +302,7 @@ class MailchimpService implements SubscriptionServiceContract
 
         foreach ($data as $key => $value) {
             $groupName = array_search($key, $this->interests);
-            if ($groupName) {
+            if ($groupName && $value) {
                 $formatData[$groupName] = $value;
             }
         }
