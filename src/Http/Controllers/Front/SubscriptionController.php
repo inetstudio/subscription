@@ -3,6 +3,7 @@
 namespace InetStudio\Subscription\Http\Controllers\Front;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use InetStudio\Subscription\Managers\SubscriptionManager;
 
@@ -17,12 +18,15 @@ class SubscriptionController extends Controller
      * Синхронизируем локальные данные с сервисом подписок.
      *
      * @param Request $request
-     * @param SubscriptionManager $subscriptionManager
      * @param string $service
+     * @return JsonResponse
      */
-    public function sync(Request $request, SubscriptionManager $subscriptionManager, string $service): void
+    public function sync(Request $request, string $service): JsonResponse
     {
-        $subscriptionService = $subscriptionManager->with($service);
-        $subscriptionService->sync($request);
+        $subscriptionService = (new SubscriptionManager(app()))->with($service);
+
+        return response()->json([
+            'success' => $subscriptionService->sync($request),
+        ]);
     }
 }

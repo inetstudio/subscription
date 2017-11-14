@@ -4,6 +4,7 @@ namespace InetStudio\Subscription\Services;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use DrewM\MailChimp\Webhook;
 use DrewM\MailChimp\MailChimp;
 use InetStudio\Subscription\Models\SubscriptionModel;
 use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
@@ -161,9 +162,11 @@ class MailchimpService implements SubscriptionServiceContract
      */
     public function sync(Request $request): bool
     {
-        $email = $request->input('data.email');
+        $requestData = Webhook::receive($request->instance()->getContent());
 
-        if ($email) {
+        if (isset($requestData['data']['email'])) {
+            $email = $requestData['data']['email'];
+
             $user = $this->getUser($email);
 
             if (isset($user['id'])) {
@@ -193,7 +196,7 @@ class MailchimpService implements SubscriptionServiceContract
      */
     private function getUser(string $email): array
     {
-        $subscriberHash = $this->service->subscriberHash('email');
+        $subscriberHash = $this->service->subscriberHash($email);
 
         return $this->service->get('lists/'.$this->subscriptionList.'/members/'.$subscriberHash, []);
     }
