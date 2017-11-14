@@ -84,6 +84,25 @@ class MailchimpService implements SubscriptionServiceContract
     }
 
     /**
+     * Удаляем пользователя из листа рассылки.
+     *
+     * @param SubscriptionModel $subscription
+     * @return bool
+     */
+    public function delete(SubscriptionModel $subscription): bool
+    {
+        $subscriberHash = $this->service->subscriberHash($subscription->email);
+
+        $exist = $this->checkUser($subscription->email);
+
+        if ($exist) {
+            $this->service->delete('lists/'.$this->subscriptionList.'/members/'.$subscriberHash, []);
+        }
+
+        return true;
+    }
+
+    /**
      * Проверяем пользователя на нахождение в листе.
      *
      * @param string $email
@@ -174,13 +193,16 @@ class MailchimpService implements SubscriptionServiceContract
 
                 if ($subscribers->count() > 0) {
                     $subscriber = $subscribers->first();
-
                     $subscriber->flushEventListeners();
 
-                    $subscriber->email = (isset($user['email'])) ? $user['email'] : $subscriber->email;
-                    $subscriber->is_subscribed = (isset($user['status']) && $user['status'] == 'subscribed') ? 1 : 0;
-                    $subscriber->additional_info = $this->formatAdditionalInfo($user);
-                    $subscriber->save();
+                    if ($requestData['type'] == 'cleaned') {
+                        $subscriber->delete();
+                    } else {
+                        $subscriber->email = (isset($user['email'])) ? $user['email'] : $subscriber->email;
+                        $subscriber->is_subscribed = (isset($user['status']) && $user['status'] == 'subscribed') ? 1 : 0;
+                        $subscriber->additional_info = $this->formatAdditionalInfo($user);
+                        $subscriber->save();
+                    }
                 }
             }
         }

@@ -8,10 +8,12 @@ use InetStudio\Subscription\Models\SubscriptionModel;
 class SubscriptionTransformer extends TransformerAbstract
 {
     /**
+     * Подготовка данных для отображения в таблице.
+     *
      * @param SubscriptionModel $subscription
      * @return array
      */
-    public function transform(SubscriptionModel $subscription)
+    public function transform(SubscriptionModel $subscription): array
     {
         return [
             'id' => (int) $subscription->id,

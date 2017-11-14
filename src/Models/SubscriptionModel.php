@@ -7,6 +7,36 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * InetStudio\Subscription\Models\SubscriptionModel
+ *
+ * @property int $id
+ * @property string $email
+ * @property int $is_subscribed
+ * @property string $user_id
+ * @property array $additional_info
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \App\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel active()
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel inactive()
+ * @method static \Illuminate\Database\Query\Builder|\InetStudio\Subscription\Models\SubscriptionModel onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereAdditionalInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereIsSubscribed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\InetStudio\Subscription\Models\SubscriptionModel withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\InetStudio\Subscription\Models\SubscriptionModel withoutTrashed()
+ * @mixin \Eloquent
+ */
 class SubscriptionModel extends Model
 {
     use Notifiable;
@@ -40,7 +70,7 @@ class SubscriptionModel extends Model
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * Атрибуты, которые должны быть преобразованы к базовым типам.
      *
      * @var array
      */
@@ -48,11 +78,23 @@ class SubscriptionModel extends Model
         'additional_info' => 'array',
     ];
 
+    /**
+     * Заготовка запроса "Подписанные пользователи".
+     *
+     * @param $query
+     * @return mixed
+     */
     public function scopeActive($query)
     {
         return $query->where('is_subscribed', 1);
     }
 
+    /**
+     * Заготовка запроса "Отписавшиеся пользователи".
+     *
+     * @param $query
+     * @return mixed
+     */
     public function scopeInactive($query)
     {
         return $query->where('is_subscribed', 0);

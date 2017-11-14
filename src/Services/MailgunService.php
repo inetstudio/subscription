@@ -75,6 +75,17 @@ class MailgunService implements SubscriptionServiceContract
     }
 
     /**
+     * Удаляем пользователя из листа рассылки.
+     *
+     * @param SubscriptionModel $subscription
+     * @return bool
+     */
+    public function delete(SubscriptionModel $subscription): bool
+    {
+        return true;
+    }
+
+    /**
      * Получаем дополнительные данные пользователя.
      *
      * @param SubscriptionModel $subscription

@@ -7,9 +7,8 @@ use InetStudio\Subscription\Services\LocalService;
 use InetStudio\Subscription\Services\MailgunService;
 use InetStudio\Subscription\Services\MindboxService;
 use InetStudio\Subscription\Services\MailchimpService;
-use InetStudio\Subscription\Contracts\SubscriptionManagerContract;
 
-class SubscriptionManager extends Manager implements SubscriptionManagerContract
+class SubscriptionManager extends Manager
 {
     /**
      * Возвращаем сервис подписки.
@@ -27,7 +26,7 @@ class SubscriptionManager extends Manager implements SubscriptionManagerContract
      *
      * @return LocalService
      */
-    protected function createLocalDriver()
+    protected function createLocalDriver(): LocalService
     {
         return new LocalService();
     }
@@ -37,7 +36,7 @@ class SubscriptionManager extends Manager implements SubscriptionManagerContract
      *
      * @return MailchimpService
      */
-    protected function createMailchimpDriver()
+    protected function createMailchimpDriver(): MailchimpService
     {
         $config = $this->app['config']['subscription.mailchimp'];
 
@@ -49,7 +48,7 @@ class SubscriptionManager extends Manager implements SubscriptionManagerContract
      *
      * @return MailgunService
      */
-    protected function createMailgunDriver()
+    protected function createMailgunDriver(): MailgunService
     {
         $config = $this->app['config']['subscription.mailgun'];
 
@@ -61,7 +60,7 @@ class SubscriptionManager extends Manager implements SubscriptionManagerContract
      *
      * @return MindboxService
      */
-    protected function createMindboxDriver()
+    protected function createMindboxDriver(): MindboxService
     {
         $config = $this->app['config']['subscription.mindbox'];
 

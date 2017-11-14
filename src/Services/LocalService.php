@@ -42,6 +42,17 @@ class LocalService implements SubscriptionServiceContract
     }
 
     /**
+     * Удаляем пользователя из листа рассылки.
+     *
+     * @param SubscriptionModel $subscription
+     * @return bool
+     */
+    public function delete(SubscriptionModel $subscription): bool
+    {
+        return true;
+    }
+
+    /**
      * Синхронизируем локальные данные с сервисом подписок.
      *
      * @param Request $request

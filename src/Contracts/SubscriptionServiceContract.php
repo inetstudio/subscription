@@ -11,31 +11,39 @@ interface SubscriptionServiceContract
      * Подписываем пользователя на рассылку.
      *
      * @param SubscriptionModel $subscription
-     * @return mixed
+     * @return bool
      */
-    public function subscribe(SubscriptionModel $subscription);
+    public function subscribe(SubscriptionModel $subscription): bool;
 
     /**
      * Обновляем информацию подписчика.
      *
      * @param SubscriptionModel $subscription
-     * @return mixed
+     * @return bool
      */
-    public function update(SubscriptionModel $subscription);
+    public function update(SubscriptionModel $subscription): bool;
 
     /**
      * Отписываем пользователя от рассылки.
      *
      * @param SubscriptionModel $subscription
-     * @return mixed
+     * @return bool
      */
-    public function unsubscribe(SubscriptionModel $subscription);
+    public function unsubscribe(SubscriptionModel $subscription): bool;
+
+    /**
+     * Удаляем пользователя из листа рассылки.
+     *
+     * @param SubscriptionModel $subscription
+     * @return bool
+     */
+    public function delete(SubscriptionModel $subscription): bool;
 
     /**
      * Синхронизируем локальные данные с сервисом подписок.
      *
      * @param Request $request
-     * @return mixed
+     * @return bool
      */
-    public function sync(Request $request);
+    public function sync(Request $request): bool;
 }

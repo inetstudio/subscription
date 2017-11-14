@@ -100,7 +100,7 @@ class SubscriptionServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerBindings()
+    public function registerBindings(): void
     {
         $driver = config('subscription.driver');
 

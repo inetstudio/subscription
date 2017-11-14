@@ -2,16 +2,18 @@
 
 namespace InetStudio\Subscription\Http\Controllers\Back;
 
+use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use InetStudio\AdminPanel\Traits\DatatablesTrait;
 use InetStudio\Subscription\Models\SubscriptionModel;
 use InetStudio\Subscription\Transformers\SubscriptionTransformer;
 
 /**
- * Контроллер для управления подписками.
+ * Контроллер для управления подписками (Back).
  *
- * Class ContestByTagStatusesController
+ * Class SubscriptionController
  */
 class SubscriptionController extends Controller
 {
@@ -23,7 +25,7 @@ class SubscriptionController extends Controller
      * @param DataTables $dataTable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(DataTables $dataTable)
+    public function index(DataTables $dataTable): View
     {
         $table = $this->generateTable($dataTable, 'subscription', 'index');
 
@@ -31,7 +33,7 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * Datatables serverside.
+     * DataTables ServerSide.
      *
      * @return mixed
      */
@@ -51,7 +53,7 @@ class SubscriptionController extends Controller
      * @param null $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id = null)
+    public function edit($id = null): View
     {
         if (! is_null($id) && $id > 0 && $item = SubscriptionModel::find($id)) {
             return view('admin.module.subscription::pages.form', [
@@ -68,7 +70,7 @@ class SubscriptionController extends Controller
      * @param null $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id = null)
+    public function destroy($id = null): JsonResponse
     {
         if (! is_null($id) && $id > 0 && $item = SubscriptionModel::find($id)) {
             $item->delete();

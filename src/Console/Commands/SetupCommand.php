@@ -7,32 +7,32 @@ use Illuminate\Console\Command;
 class SetupCommand extends Command
 {
     /**
-     * The console command name.
+     * Имя команды.
      *
      * @var string
      */
     protected $name = 'inetstudio:subscription:setup';
 
     /**
-     * The console command description.
+     * Описание команды.
      *
      * @var string
      */
     protected $description = 'Setup subscription package';
 
     /**
-     * Commands to call with their description.
+     * Список дополнительных команд.
      *
      * @var array
      */
     protected $calls = [];
 
     /**
-     * Execute the console command.
+     * Запуск команды.
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->initCommands();
 
@@ -51,7 +51,7 @@ class SetupCommand extends Command
      *
      * @return void
      */
-    private function initCommands()
+    private function initCommands(): void
     {
         $this->calls = [
             [

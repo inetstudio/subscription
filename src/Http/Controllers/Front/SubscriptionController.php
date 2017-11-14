@@ -8,9 +8,9 @@ use App\Http\Controllers\Controller;
 use InetStudio\Subscription\Managers\SubscriptionManager;
 
 /**
- * Контроллер для управления подписками.
+ * Контроллер для управления подписками (Front).
  *
- * Class ContestByTagStatusesController
+ * Class SubscriptionController
  */
 class SubscriptionController extends Controller
 {
