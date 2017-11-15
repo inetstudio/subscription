@@ -45,6 +45,6 @@ class SubscriptionObserver
      */
     public function deleting(SubscriptionModel $subscription): void
     {
-        $this->subscriptionService->unsubscribe($subscription);
+        $this->subscriptionService->delete($subscription);
     }
 }
