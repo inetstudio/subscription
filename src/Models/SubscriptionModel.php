@@ -4,7 +4,6 @@ namespace InetStudio\Subscription\Models;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -18,7 +17,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read \App\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel active()
  * @method static bool|null forceDelete()
@@ -39,7 +37,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class SubscriptionModel extends Model
 {
-    use Notifiable;
     use SoftDeletes;
 
     /**
