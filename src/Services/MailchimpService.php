@@ -187,22 +187,31 @@ class MailchimpService implements SubscriptionServiceContract
             $email = $requestData['data']['email'];
 
             $user = $this->getUser($email);
+            $subscribers = SubscriptionModel::withTrashed()->where('email', $email)->get();
+            SubscriptionModel::flushEventListeners();
+
+            if ($subscribers->count() > 0) {
+                $subscriber = $subscribers->first();
+
+                if ($subscriber->trashed()) {
+                    $subscriber->restore();
+                }
+            } else {
+                $subscriber = new SubscriptionModel();
+            }
 
             if (isset($user['id'])) {
-                $subscribers = SubscriptionModel::where('email', $email)->get();
-
-                if ($subscribers->count() > 0) {
-                    $subscriber = $subscribers->first();
-                    $subscriber->flushEventListeners();
-
-                    if ($requestData['type'] == 'cleaned') {
-                        $subscriber->delete();
-                    } else {
-                        $subscriber->email = (isset($user['email'])) ? $user['email'] : $subscriber->email;
-                        $subscriber->is_subscribed = (isset($user['status']) && $user['status'] == 'subscribed') ? 1 : 0;
-                        $subscriber->additional_info = $this->formatAdditionalInfo($user);
-                        $subscriber->save();
-                    }
+                if ($requestData['type'] == 'cleaned') {
+                    $subscriber->delete();
+                } else {
+                    $subscriber->email = (isset($user['email'])) ? $user['email'] : $subscriber->email;
+                    $subscriber->is_subscribed = (isset($user['status']) && $user['status'] == 'subscribed') ? 1 : 0;
+                    $subscriber->additional_info = $this->formatAdditionalInfo($user);
+                    $subscriber->save();
+                }
+            } else {
+                if (isset($requestData['data']['action']) && $requestData['data']['action'] == 'delete') {
+                    $subscriber->delete();
                 }
             }
         }
