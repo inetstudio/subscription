@@ -161,7 +161,7 @@ class MailchimpService implements SubscriptionServiceContract
         $original = $subscription->getOriginal();
 
         $additionalData = $this->getAdditionalInfo($subscription);
-        $status = ($subscription->is_subscribed == 0) ? 'unsubscribed' : 'subscribed';
+        $status = ($subscription->is_subscribed == 0) ? 'unsubscribed' : 'pending';
 
         $subscriberHash = $this->service->subscriberHash($original['email']);
 
