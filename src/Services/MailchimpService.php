@@ -158,10 +158,12 @@ class MailchimpService implements SubscriptionServiceContract
      */
     private function updateUser(SubscriptionModel $subscription): bool
     {
+        $original = $subscription->getOriginal();
+
         $additionalData = $this->getAdditionalInfo($subscription);
         $status = ($subscription->is_subscribed == 0) ? 'unsubscribed' : 'subscribed';
 
-        $subscriberHash = $this->service->subscriberHash($subscription->email);
+        $subscriberHash = $this->service->subscriberHash($original['email']);
 
         $options = array_merge([
             'email_address' => $subscription->email,
