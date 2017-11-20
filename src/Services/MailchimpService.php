@@ -206,7 +206,7 @@ class MailchimpService implements SubscriptionServiceContract
                 if ($requestData['type'] == 'cleaned') {
                     $subscriber->delete();
                 } else {
-                    $subscriber->email = (isset($user['email'])) ? $user['email'] : $subscriber->email;
+                    $subscriber->email = $email;
                     $subscriber->is_subscribed = (isset($user['status']) && $user['status'] == 'subscribed') ? 1 : 0;
                     $subscriber->additional_info = $this->formatAdditionalInfo($user);
                     $subscriber->save();
