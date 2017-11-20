@@ -53,8 +53,7 @@ class MailchimpService implements SubscriptionServiceContract
      */
     public function update(SubscriptionModel $subscription): bool
     {
-        $prevEmail = $subscription->getOriginal('email');
-        $prevEmail = ($prevEmail) ?: $subscription->email;
+        $prevEmail = $subscription->getOriginal('email', $subscription->email);
 
         $exist = $this->checkUser($prevEmail);
 
@@ -159,8 +158,7 @@ class MailchimpService implements SubscriptionServiceContract
      */
     private function updateUser(SubscriptionModel $subscription): bool
     {
-        $prevEmail = $subscription->getOriginal('email');
-        $prevEmail = ($prevEmail) ?: $subscription->email;
+        $prevEmail = $subscription->getOriginal('email', $subscription->email);
 
         $additionalData = $this->getAdditionalInfo($subscription);
         $status = ($subscription->is_subscribed == 0) ? 'unsubscribed' : 'pending';
