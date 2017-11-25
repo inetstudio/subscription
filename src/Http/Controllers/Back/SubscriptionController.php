@@ -6,9 +6,9 @@ use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use InetStudio\AdminPanel\Traits\DatatablesTrait;
 use InetStudio\Subscription\Models\SubscriptionModel;
 use InetStudio\Subscription\Transformers\SubscriptionTransformer;
+use InetStudio\AdminPanel\Http\Controllers\Back\Traits\DatatablesTrait;
 
 /**
  * Контроллер для управления подписками (Back).
