@@ -32,7 +32,7 @@ return [
                 ['data' => 'info', 'name' => 'additional_info', 'title' => 'Дополнительная информация', 'visible' => false],
                 ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Дата создания'],
                 ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Дата обновления'],
-                ['data' => 'status', 'name' => 'is_subscribed', 'title' => 'Статус'],
+                ['data' => 'status', 'name' => 'status', 'title' => 'Статус'],
                 ['data' => 'actions', 'name' => 'actions', 'title' => 'Действия', 'orderable' => false, 'searchable' => false],
             ],
         ],

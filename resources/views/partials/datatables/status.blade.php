@@ -1,1 +1,9 @@
-<span class="label label-{{ ($status) ? 'primary' : 'danger' }}">{{ ($status) ? 'Подписан' : 'Отписан' }}</span>
+@php
+    $colors = [
+        'pending' => 'warning',
+        'subscribed' => 'primary',
+        'unsubscribed' => 'danger',
+        'cleaned' => 'default',
+    ];
+@endphp
+<span class="label label-{{ (isset($colors[$status])) ? $colors[$status] : 'info' }}">{{ $status }}</span>

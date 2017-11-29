@@ -30,7 +30,7 @@ class MailgunService implements SubscriptionServiceContract
      */
     public function subscribe(SubscriptionModel $subscription): bool
     {
-        $status = ($subscription->is_subscribed == 0) ? 'unsubscribed' : 'subscribed';
+        $status = $subscription->status;
 
         $this->service->post('lists/'.$this->subscriptionList.'/members', [
             'subscribed' => $status,
@@ -49,7 +49,7 @@ class MailgunService implements SubscriptionServiceContract
     public function update(SubscriptionModel $subscription): bool
     {
         $original = $subscription->getOriginal();
-        $status = ($subscription->is_subscribed == 0) ? 'unsubscribed' : 'subscribed';
+        $status = $subscription->status;
 
         $this->service->put('lists/'.$this->subscriptionList.'/members/'.$original, [
             'subscribed' => $status,

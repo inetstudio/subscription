@@ -22,7 +22,7 @@ class SubscriptionTransformer extends TransformerAbstract
             'created_at' => (string) $subscription->created_at,
             'updated_at' => (string) $subscription->updated_at,
             'status' => view('admin.module.subscription::partials.datatables.status', [
-                'status' => $subscription->is_subscribed,
+                'status' => $subscription->status,
             ])->render(),
             'actions' => view('admin.module.subscription::partials.datatables.actions', [
                 'id' => $subscription->id,

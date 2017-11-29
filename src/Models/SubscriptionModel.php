@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property int $id
  * @property string $email
- * @property int $is_subscribed
+ * @property string $status
  * @property string $user_id
  * @property array $additional_info
  * @property \Carbon\Carbon|null $created_at
@@ -52,7 +52,7 @@ class SubscriptionModel extends Model
      * @var array
      */
     protected $fillable = [
-        'email', 'is_subscribed', 'user_id', 'additional_info',
+        'email', 'status', 'user_id', 'additional_info',
     ];
 
     /**
@@ -76,14 +76,25 @@ class SubscriptionModel extends Model
     ];
 
     /**
+     * Заготовка запроса "Ожидание подтверждения".
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+
+    /**
      * Заготовка запроса "Подписанные пользователи".
      *
      * @param $query
      * @return mixed
      */
-    public function scopeActive($query)
+    public function scopeSubscribed($query)
     {
-        return $query->where('is_subscribed', 1);
+        return $query->where('status', 'subscribed');
     }
 
     /**
@@ -92,9 +103,20 @@ class SubscriptionModel extends Model
      * @param $query
      * @return mixed
      */
-    public function scopeInactive($query)
+    public function scopeUnsubscribed($query)
     {
-        return $query->where('is_subscribed', 0);
+        return $query->where('status', 'unsubscribed');
+    }
+
+    /**
+     * Заготовка запроса "Очищенные пользователи".
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeCleaned($query)
+    {
+        return $query->where('status', 'cleaned');
     }
 
     /**
