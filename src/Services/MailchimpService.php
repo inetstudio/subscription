@@ -6,12 +6,12 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use DrewM\MailChimp\Webhook;
 use DrewM\MailChimp\MailChimp;
-use InetStudio\Subscription\Events\UserDeleteEvent;
-use InetStudio\Subscription\Events\UserCleanedEvent;
-use InetStudio\Subscription\Events\UserPendingEvent;
+use InetStudio\Subscription\Events\EmailDeletedEvent;
+use InetStudio\Subscription\Events\EmailCleanedEvent;
+use InetStudio\Subscription\Events\EmailPendingEvent;
 use InetStudio\Subscription\Models\SubscriptionModel;
-use InetStudio\Subscription\Events\UserSubscribedEvent;
-use InetStudio\Subscription\Events\UserUnsubscribedEvent;
+use InetStudio\Subscription\Events\EmailSubscribedEvent;
+use InetStudio\Subscription\Events\EmailUnsubscribedEvent;
 use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
 
 class MailchimpService implements SubscriptionServiceContract
@@ -85,7 +85,7 @@ class MailchimpService implements SubscriptionServiceContract
             ]);
         }
 
-        event(new UserUnsubscribedEvent($subscription));
+        event(new EmailUnsubscribedEvent($subscription));
 
         return true;
     }
@@ -106,7 +106,7 @@ class MailchimpService implements SubscriptionServiceContract
             $this->service->delete('lists/'.$this->subscriptionList.'/members/'.$subscriberHash, []);
         }
 
-        event(new UserDeleteEvent($subscription));
+        event(new EmailDeletedEvent($subscription));
 
         return true;
     }
@@ -156,7 +156,7 @@ class MailchimpService implements SubscriptionServiceContract
 
         $this->service->post('lists/'.$this->subscriptionList.'/members', $options);
 
-        event(new UserPendingEvent($subscription));
+        event(new EmailPendingEvent($subscription));
 
         return true;
     }
@@ -183,13 +183,13 @@ class MailchimpService implements SubscriptionServiceContract
         if ($prevEmail != $subscription->email) {
             $options['status'] = 'pending';
 
-            event(new UserPendingEvent($subscription));
+            event(new EmailPendingEvent($subscription));
         }
 
         if ($prevStatus != $subscription->status) {
             $options['status'] = $subscription->status;
 
-            $event = 'User'.Str::ucfirst($subscription->status).'Event';
+            $event = 'Email'.Str::ucfirst($subscription->status).'Event';
 
             event(new $event($subscription));
         }
@@ -229,21 +229,28 @@ class MailchimpService implements SubscriptionServiceContract
             if (isset($user['id'])) {
                 if ($requestData['type'] == 'cleaned') {
 
-                    event(new UserCleanedEvent($subscriber));
+                    $subscriber->status = 'cleaned';
+                    $subscriber->save();
 
-                    $subscriber->delete();
+                    event(new EmailCleanedEvent($subscriber));
                 } else {
                     $subscriber->email = $email;
                     $subscriber->status = (isset($user['status'])) ? $user['status'] : 'unsubscribed';
                     $subscriber->additional_info = $this->formatAdditionalInfo($user);
                     $subscriber->save();
 
-                    $event = 'User'.Str::ucfirst($subscriber->status).'Event';
+                    $event = 'Email'.Str::ucfirst($subscriber->status).'Event';
 
                     event(new $event($subscriber));
                 }
             } else {
                 if (isset($requestData['data']['action']) && $requestData['data']['action'] == 'delete') {
+
+                    $subscriber->status = 'deleted';
+                    $subscriber->save();
+
+                    event(new EmailDeletedEvent($subscriber));
+
                     $subscriber->delete();
                 }
             }

@@ -5,7 +5,7 @@ namespace InetStudio\Subscription\Events;
 use Illuminate\Queue\SerializesModels;
 use InetStudio\Subscription\Models\SubscriptionModel;
 
-class UserSubscribedEvent
+class EmailDeletedEvent
 {
     use SerializesModels;
 
@@ -15,7 +15,7 @@ class UserSubscribedEvent
     public $subscription;
 
     /**
-     * UserSubscribedEvent constructor.
+     * EmailDeletedEvent constructor.
      * @param SubscriptionModel $subscription
      */
     public function __construct(SubscriptionModel $subscription)
