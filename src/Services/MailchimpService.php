@@ -10,7 +10,6 @@ use InetStudio\Subscription\Events\EmailDeletedEvent;
 use InetStudio\Subscription\Events\EmailCleanedEvent;
 use InetStudio\Subscription\Events\EmailPendingEvent;
 use InetStudio\Subscription\Models\SubscriptionModel;
-use InetStudio\Subscription\Events\EmailSubscribedEvent;
 use InetStudio\Subscription\Events\EmailUnsubscribedEvent;
 use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
 
@@ -189,7 +188,7 @@ class MailchimpService implements SubscriptionServiceContract
         if ($prevStatus != $subscription->status) {
             $options['status'] = $subscription->status;
 
-            $event = 'Email'.Str::ucfirst($subscription->status).'Event';
+            $event = '\InetStudio\Subscription\Events\Email'.Str::ucfirst($subscription->status).'Event';
 
             event(new $event($subscription));
         }
@@ -239,7 +238,7 @@ class MailchimpService implements SubscriptionServiceContract
                     $subscriber->additional_info = $this->formatAdditionalInfo($user);
                     $subscriber->save();
 
-                    $event = 'Email'.Str::ucfirst($subscriber->status).'Event';
+                    $event = '\InetStudio\Subscription\Events\Email'.Str::ucfirst($subscriber->status).'Event';
 
                     event(new $event($subscriber));
                 }
