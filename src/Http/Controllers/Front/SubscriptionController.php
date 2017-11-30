@@ -2,10 +2,9 @@
 
 namespace InetStudio\Subscription\Http\Controllers\Front;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use InetStudio\Subscription\Managers\SubscriptionManager;
+use InetStudio\Subscription\Http\Requests\Front\SubscribeRequest;
 
 /**
  * Контроллер для управления подписками (Front).
@@ -15,18 +14,18 @@ use InetStudio\Subscription\Managers\SubscriptionManager;
 class SubscriptionController extends Controller
 {
     /**
-     * Синхронизируем локальные данные с сервисом подписок.
+     * Подписка пользователя.
      *
-     * @param Request $request
-     * @param string $service
-     * @return JsonResponse
+     * @param SubscribeRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function sync(Request $request, string $service): JsonResponse
+    public function subscribe(SubscribeRequest $request): JsonResponse
     {
-        $subscriptionService = (new SubscriptionManager(app()))->with($service);
+        $subscriptionService = app()->make('SubscriptionService');
 
         return response()->json([
-            'success' => $subscriptionService->sync($request),
+            'success' => $subscriptionService->subscribe($request),
+            'message' => trans('subscription::messages.pending'),
         ]);
     }
 }

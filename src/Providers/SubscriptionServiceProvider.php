@@ -5,13 +5,19 @@ namespace InetStudio\Subscription\Providers;
 use Illuminate\Support\ServiceProvider;
 use InetStudio\Subscription\Models\SubscriptionModel;
 use InetStudio\Subscription\Managers\SubscriptionManager;
+use InetStudio\Subscription\Services\SubscriptionService;
 use InetStudio\Subscription\Console\Commands\SetupCommand;
 use InetStudio\Subscription\Observers\SubscriptionObserver;
 use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
 
 class SubscriptionServiceProvider extends ServiceProvider
 {
-    public function boot()
+    /**
+     * Загрузка сервиса.
+     *
+     * @return void
+     */
+    public function boot(): void
     {
         $this->registerConsoleCommands();
         $this->registerPublishes();
@@ -21,17 +27,17 @@ class SubscriptionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the application services.
+     * Регистрация привязки в контейнере.
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->registerBindings();
     }
 
     /**
-     * Register Subscription's console commands.
+     * Регистрация команд.
      *
      * @return void
      */
@@ -45,7 +51,7 @@ class SubscriptionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Setup the resource publishing groups for Subscription.
+     * Регистрация ресурсов.
      *
      * @return void
      */
@@ -66,17 +72,18 @@ class SubscriptionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register Subscription's routes.
+     * Регистрация путей.
      *
      * @return void
      */
     protected function registerRoutes(): void
     {
         $this->loadRoutesFrom(__DIR__.'/../../routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/../../routes/api.php');
     }
 
     /**
-     * Register Subscription's views.
+     * Регистрация представлений.
      *
      * @return void
      */
@@ -86,7 +93,17 @@ class SubscriptionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register Subscription's observers.
+     * Регистрация переводов.
+     *
+     * @return void
+     */
+    protected function registerTranslations(): void
+    {
+        $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'subscription');
+    }
+
+    /**
+     * Регистрация наблюдателей.
      *
      * @return void
      */
@@ -96,7 +113,7 @@ class SubscriptionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register Subscription's services bindings.
+     * Регистрация привязок, алиасов и сторонних провайдеров сервисов.
      *
      * @return void
      */
@@ -107,5 +124,7 @@ class SubscriptionServiceProvider extends ServiceProvider
         $this->app->singleton(SubscriptionServiceContract::class, function ($app) use ($driver) {
             return (new SubscriptionManager($app))->with($driver);
         });
+
+        $this->app->bind('SubscriptionService', SubscriptionService::class);
     }
 }
