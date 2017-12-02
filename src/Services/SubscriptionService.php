@@ -11,9 +11,9 @@ class SubscriptionService
      * Сохраняем подписчика.
      *
      * @param $request
-     * @return bool
+     * @return SubscriptionModel
      */
-    public function subscribe($request): bool
+    public function subscribe($request): SubscriptionModel
     {
         $usersService = app()->make('UsersService');
 
