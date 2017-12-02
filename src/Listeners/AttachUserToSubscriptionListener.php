@@ -29,7 +29,7 @@ class AttachUserToSubscriptionListener
 
         foreach ($subscriptions as $subscription) {
             $subscription->user_id = $user->id;
-            $subscription->setAdditionalInfo('personal.FNAME', $user->name);
+            $subscription->setJSONData('additional_info', 'personal.FNAME', $user->name);
             $subscription->save();
         }
     }

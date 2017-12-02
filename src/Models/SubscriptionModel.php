@@ -5,7 +5,7 @@ namespace InetStudio\Subscription\Models;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use InetStudio\AdminPanel\Models\Traits\HasAdditionalInfo;
+use InetStudio\AdminPanel\Models\Traits\HasJSONColumns;
 
 /**
  * InetStudio\Subscription\Models\SubscriptionModel
@@ -41,7 +41,7 @@ use InetStudio\AdminPanel\Models\Traits\HasAdditionalInfo;
 class SubscriptionModel extends Model
 {
     use SoftDeletes;
-    use HasAdditionalInfo;
+    use HasJSONColumns;
 
     /**
      * Связанная с моделью таблица.
