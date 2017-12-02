@@ -19,7 +19,7 @@ class SubscriptionService
 
         $email = $usersService->getUserEmail($request);
 
-        $additional_info = ($request->filled('data')) ? Arr::changeKeysCase($request->get('data')) : [];
+        $additional_info = ($request->filled('subscriptionData')) ? Arr::changeKeysCase($request->get('subscriptionData')) : [];
 
         $subscriber = SubscriptionModel::withTrashed()->where('email', $email)->first();
 
@@ -45,10 +45,10 @@ class SubscriptionService
             $subscriptionData['status'] = 'pending';
         }
 
-        SubscriptionModel::updateOrCreate([
+        $subscriber = SubscriptionModel::updateOrCreate([
             'email' => $email,
         ], $subscriptionData);
 
-        return true;
+        return $subscriber;
     }
 }
