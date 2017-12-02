@@ -23,6 +23,7 @@ class SubscriptionServiceProvider extends ServiceProvider
         $this->registerPublishes();
         $this->registerRoutes();
         $this->registerViews();
+        $this->registerTranslations();
         $this->registerObservers();
     }
 
