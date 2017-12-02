@@ -2,13 +2,16 @@
 
 namespace InetStudio\Subscription\Providers;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use InetStudio\AdminPanel\Events\Auth\ActivatedEvent;
 use InetStudio\Subscription\Models\SubscriptionModel;
 use InetStudio\Subscription\Managers\SubscriptionManager;
 use InetStudio\Subscription\Services\SubscriptionService;
 use InetStudio\Subscription\Console\Commands\SetupCommand;
 use InetStudio\Subscription\Observers\SubscriptionObserver;
 use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
+use InetStudio\Subscription\Listeners\AttachUserToSubscriptionListener;
 
 class SubscriptionServiceProvider extends ServiceProvider
 {
@@ -24,6 +27,7 @@ class SubscriptionServiceProvider extends ServiceProvider
         $this->registerRoutes();
         $this->registerViews();
         $this->registerTranslations();
+        $this->registerEvents();
         $this->registerObservers();
     }
 
@@ -101,6 +105,16 @@ class SubscriptionServiceProvider extends ServiceProvider
     protected function registerTranslations(): void
     {
         $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'subscription');
+    }
+
+    /**
+     * Регистрация событий.
+     *
+     * @return void
+     */
+    protected function registerEvents(): void
+    {
+        Event::listen(ActivatedEvent::class, AttachUserToSubscriptionListener::class);
     }
 
     /**

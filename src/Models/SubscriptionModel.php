@@ -5,6 +5,7 @@ namespace InetStudio\Subscription\Models;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use InetStudio\AdminPanel\Models\Traits\HasAdditionalInfo;
 
 /**
  * InetStudio\Subscription\Models\SubscriptionModel
@@ -18,11 +19,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
  * @property-read \App\User $user
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel active()
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel cleaned()
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel inactive()
  * @method static \Illuminate\Database\Query\Builder|\InetStudio\Subscription\Models\SubscriptionModel onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel pending()
  * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel subscribed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel unsubscribed()
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereAdditionalInfo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereDeletedAt($value)
@@ -38,6 +41,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class SubscriptionModel extends Model
 {
     use SoftDeletes;
+    use HasAdditionalInfo;
 
     /**
      * Связанная с моделью таблица.
