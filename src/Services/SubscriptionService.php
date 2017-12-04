@@ -13,10 +13,21 @@ class SubscriptionService
      * @param $request
      * @return array
      */
-    public function subscribe($request): array
+    public function subscribeByRequest($request): array
     {
         $subscriptionData = $this->getRequestSubscriptionData($request);
 
+        return $this->subscribeByData($subscriptionData);
+    }
+
+    /**
+     * Сохраняем подписчика.
+     *
+     * @param array $subscriptionData
+     * @return array
+     */
+    public function subscribeByData(array $subscriptionData): array
+    {
         $subscriber = $this->getSubscriber($subscriptionData['email']);
         $subscriber = $this->restoreSubscriber($subscriber);
 
@@ -44,10 +55,21 @@ class SubscriptionService
      * @param $request
      * @return array
      */
-    public function unsubscribe($request): array
+    public function unsubscribeByRequest($request): array
     {
         $subscriptionData = $this->getRequestSubscriptionData($request);
 
+        return $this->unsubscribeByData($subscriptionData);
+    }
+
+    /**
+     * Отписываем пользователя.
+     *
+     * @param array $subscriptionData
+     * @return array
+     */
+    public function unsubscribeByData(array $subscriptionData): array
+    {
         $subscriber = $this->getSubscriber($subscriptionData['email']);
         $subscriber = $this->restoreSubscriber($subscriber);
 

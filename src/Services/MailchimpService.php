@@ -180,12 +180,6 @@ class MailchimpService implements SubscriptionServiceContract
             'email_address' => $subscription->email,
         ], $additionalData);
 
-        if ($prevEmail != $subscription->email) {
-            $options['status'] = 'pending';
-
-            event(new EmailPendingEvent($subscription));
-        }
-
         if ($prevStatus != $subscription->status) {
             $options['status'] = $subscription->status;
 

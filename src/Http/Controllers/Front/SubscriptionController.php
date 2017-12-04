@@ -24,7 +24,7 @@ class SubscriptionController extends Controller
         $subscriptionService = app()->make('SubscriptionService');
 
         return response()->json([
-            'success' => $subscriptionService->subscribe($request),
+            'success' => $subscriptionService->subscribeByRequest($request),
             'message' => trans('subscription::messages.pending'),
         ]);
     }

@@ -25,7 +25,9 @@ class SubscriptionObserver
      */
     public function created(SubscriptionModel $subscription): void
     {
-        $this->subscriptionService->subscribe($subscription);
+        if (! $subscription->trashed() ) {
+            $this->subscriptionService->subscribe($subscription);
+        }
     }
 
     /**
@@ -35,7 +37,9 @@ class SubscriptionObserver
      */
     public function updating(SubscriptionModel $subscription): void
     {
-        $this->subscriptionService->update($subscription);
+        if (! $subscription->trashed() ) {
+            $this->subscriptionService->update($subscription);
+        }
     }
 
     /**
@@ -46,5 +50,16 @@ class SubscriptionObserver
     public function deleting(SubscriptionModel $subscription): void
     {
         $this->subscriptionService->delete($subscription);
+    }
+
+    /**
+     * Событие "объект подписки удален".
+     *
+     * @param SubscriptionModel $subscription
+     */
+    public function deleted(SubscriptionModel $subscription): void
+    {
+        $subscription->status = 'deleted';
+        $subscription->save();
     }
 }
