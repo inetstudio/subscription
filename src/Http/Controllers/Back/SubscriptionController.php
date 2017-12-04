@@ -29,7 +29,7 @@ class SubscriptionController extends Controller
     {
         $table = $this->generateTable($dataTable, 'subscription', 'index');
 
-        return view('admin.module.subscription::pages.index', compact('table'));
+        return view('admin.module.subscription::back.pages.index', compact('table'));
     }
 
     /**
@@ -56,7 +56,7 @@ class SubscriptionController extends Controller
     public function edit($id = null): View
     {
         if (! is_null($id) && $id > 0 && $item = SubscriptionModel::find($id)) {
-            return view('admin.module.subscription::pages.form', [
+            return view('admin.module.subscription::back.pages.form', [
                 'item' => $item,
             ]);
         } else {

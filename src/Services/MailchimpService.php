@@ -2,6 +2,7 @@
 
 namespace InetStudio\Subscription\Services;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use DrewM\MailChimp\Webhook;
@@ -31,7 +32,7 @@ class MailchimpService implements SubscriptionServiceContract
     {
         $this->service = new MailChimp($config['api_key']);
         $this->subscriptionList = $config['subscribers_list'];
-        $this->interests = $this->array_change_key_case_unicode($config['interests'], CASE_LOWER);
+        $this->interests = Arr::changeKeysCase($config['interests'], CASE_LOWER);
     }
 
     /**
@@ -315,7 +316,7 @@ class MailchimpService implements SubscriptionServiceContract
      */
     private function prepareGroupsInfo(array $data): array
     {
-        $data = $this->array_change_key_case_unicode($data, CASE_LOWER);
+        $data = Arr::changeKeysCase($data, CASE_LOWER);
 
         $prepareData = [];
 
@@ -378,25 +379,5 @@ class MailchimpService implements SubscriptionServiceContract
         }
 
         return $formatData;
-    }
-
-    /**
-     * Смена регистра ключей в массиве с поддержкой юникода.
-     *
-     * @param array $arr
-     * @param int $case
-     * @return array
-     */
-    private function array_change_key_case_unicode(array $arr, int $case = CASE_LOWER): array
-    {
-        $case = ($case == CASE_LOWER) ? MB_CASE_LOWER : MB_CASE_UPPER;
-
-        $returnArray = [];
-
-        foreach ($arr as $key => $value) {
-            $returnArray[mb_convert_case($key, $case, 'UTF-8')] = $value;
-        }
-
-        return $returnArray;
     }
 }

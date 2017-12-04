@@ -9,7 +9,7 @@
 @section('content')
 
     @push('breadcrumbs')
-        @include('admin.module.subscription::partials.breadcrumbs')
+        @include('admin.module.subscription::back.partials.breadcrumbs')
         <li>
             <a href="{{ route('back.subscription.index') }}">Подписчики</a>
         </li>
