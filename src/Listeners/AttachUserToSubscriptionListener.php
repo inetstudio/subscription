@@ -2,7 +2,6 @@
 
 namespace InetStudio\Subscription\Listeners;
 
-use InetStudio\AdminPanel\Events\Auth\ActivatedEvent;
 use InetStudio\Subscription\Models\SubscriptionModel;
 
 class AttachUserToSubscriptionListener
@@ -18,10 +17,10 @@ class AttachUserToSubscriptionListener
     /**
      * Handle the event.
      *
-     * @param ActivatedEvent $event
+     * @param $event
      * @return void
      */
-    public function handle(ActivatedEvent $event): void
+    public function handle($event): void
     {
         $user = $event->user;
 
