@@ -10,6 +10,7 @@ use InetStudio\Subscription\Managers\SubscriptionManager;
 use InetStudio\Subscription\Services\SubscriptionService;
 use InetStudio\Subscription\Console\Commands\SetupCommand;
 use InetStudio\Subscription\Observers\SubscriptionObserver;
+use InetStudio\AdminPanel\Events\Auth\SocialRegisteredEvent;
 use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
 use InetStudio\Subscription\Listeners\AttachUserToSubscriptionListener;
 
@@ -115,6 +116,7 @@ class SubscriptionServiceProvider extends ServiceProvider
     protected function registerEvents(): void
     {
         Event::listen(ActivatedEvent::class, AttachUserToSubscriptionListener::class);
+        Event::listen(SocialRegisteredEvent::class, AttachUserToSubscriptionListener::class);
     }
 
     /**
