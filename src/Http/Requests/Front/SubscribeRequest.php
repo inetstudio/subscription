@@ -42,14 +42,22 @@ class SubscribeRequest extends FormRequest
      */
     public function rules(): array
     {
+        $usersService = app()->make('UsersService');
+
+        $uniqueRule = Rule::unique('subscription', 'email')->where(function ($query) {
+            return $query->whereNull('deleted_at');
+        });
+
+        if ($user = $usersService->getUser()) {
+            $uniqueRule->ignore($user->id, 'user_id');
+        }
+
         return [
             'email' => [
                 'required',
                 'max:255',
                 'email',
-                Rule::unique('subscription', 'email')->where(function ($query) {
-                    return $query->whereNull('deleted_at');
-                }),
+                $uniqueRule,
             ],
             'policy-agree' => 'required',
             'subscribe-agree' => 'required',
