@@ -2,6 +2,7 @@
 
 namespace InetStudio\Subscription\Providers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use InetStudio\AdminPanel\Events\Auth\ActivatedEvent;
@@ -30,6 +31,7 @@ class SubscriptionServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerEvents();
         $this->registerObservers();
+        $this->registerViewComposers();
     }
 
     /**
@@ -127,6 +129,20 @@ class SubscriptionServiceProvider extends ServiceProvider
     public function registerObservers(): void
     {
         SubscriptionModel::observe(SubscriptionObserver::class);
+    }
+
+    /**
+     * Register Comments's view composers.
+     *
+     * @return void
+     */
+    public function registerViewComposers(): void
+    {
+        view()->composer('admin.module.subscription::back.partials.analytics.users.statistic', function ($view) {
+            $comments = SubscriptionModel::select(['status', DB::raw('count(*) as total')])->groupBy('status')->get();
+
+            $view->with('subscriptions', $comments);
+        });
     }
 
     /**
