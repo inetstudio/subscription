@@ -22,12 +22,11 @@ class SubscriptionController extends Controller
     /**
      * Список подписок.
      *
-     * @param DataTables $dataTable
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(DataTables $dataTable): View
+    public function index(): View
     {
-        $table = $this->generateTable($dataTable, 'subscription', 'index');
+        $table = $this->generateTable('subscription', 'index');
 
         return view('admin.module.subscription::back.pages.index', compact('table'));
     }
