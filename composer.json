@@ -11,9 +11,9 @@
     ],
     "require": {
       "php" : "^7.1",
-      "drewm/mailchimp-api": "^2.4",
-      "inetstudio/admin-panel": "1.5.*",
-      "mailgun/mailgun-php": "^2.3"
+      "drewm/mailchimp-api": "^2.5",
+      "inetstudio/admin-panel": "1.6.*",
+      "mailgun/mailgun-php": "^2.4"
     },
     "autoload": {
       "psr-4": {
