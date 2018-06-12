@@ -98,7 +98,7 @@ class SubscriptionService
      */
     private function getRequestSubscriptionData($request)
     {
-        $usersService = app()->make('UsersService');
+        $usersService = app()->make('InetStudio\ACL\Users\Contracts\Services\Front\UsersServiceContract');
 
         $email = $usersService->getUserEmail($request);
         $additional_info = ($request->filled('subscriptionData')) ? Arr::changeKeysCase($request->get('subscriptionData')) : [];

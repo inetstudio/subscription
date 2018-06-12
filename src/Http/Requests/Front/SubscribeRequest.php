@@ -42,7 +42,7 @@ class SubscribeRequest extends FormRequest
      */
     public function rules(): array
     {
-        $usersService = app()->make('UsersService');
+        $usersService = app()->make('InetStudio\ACL\Users\Contracts\Services\Front\UsersServiceContract');
 
         $uniqueRule = Rule::unique('subscription', 'email')->where(function ($query) {
             return $query->whereNull('deleted_at');
