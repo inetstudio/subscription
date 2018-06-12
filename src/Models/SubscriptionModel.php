@@ -2,9 +2,9 @@
 
 namespace InetStudio\Subscription\Models;
 
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use InetStudio\ACL\Users\Models\Traits\HasUser;
 use InetStudio\AdminPanel\Models\Traits\HasJSONColumns;
 
 /**
@@ -18,7 +18,6 @@ use InetStudio\AdminPanel\Models\Traits\HasJSONColumns;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel cleaned()
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\InetStudio\Subscription\Models\SubscriptionModel onlyTrashed()
@@ -40,6 +39,7 @@ use InetStudio\AdminPanel\Models\Traits\HasJSONColumns;
  */
 class SubscriptionModel extends Model
 {
+    use HasUser;
     use SoftDeletes;
     use HasJSONColumns;
 
@@ -121,15 +121,5 @@ class SubscriptionModel extends Model
     public function scopeCleaned($query)
     {
         return $query->where('status', 'cleaned');
-    }
-
-    /**
-     * Обратное отношение с моделью пользователя
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
     }
 }
