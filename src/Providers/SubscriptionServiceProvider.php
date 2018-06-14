@@ -115,8 +115,8 @@ class SubscriptionServiceProvider extends ServiceProvider
      */
     protected function registerEvents(): void
     {
-        Event::listen(app()->make('InetStudio\ACL\Activations\Contracts\Events\Front\ActivatedEventContract'), AttachUserToSubscriptionListener::class);
-        Event::listen(app()->make('InetStudio\ACL\Users\Contracts\Events\Front\SocialRegisteredEventContract'), AttachUserToSubscriptionListener::class);
+        Event::listen('InetStudio\ACL\Activations\Contracts\Events\Front\ActivatedEventContract', AttachUserToSubscriptionListener::class);
+        Event::listen('InetStudio\ACL\Users\Contracts\Events\Front\SocialRegisteredEventContract', AttachUserToSubscriptionListener::class);
     }
 
     /**
