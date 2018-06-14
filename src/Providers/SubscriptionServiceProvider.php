@@ -5,13 +5,11 @@ namespace InetStudio\Subscription\Providers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use InetStudio\AdminPanel\Events\Auth\ActivatedEvent;
 use InetStudio\Subscription\Models\SubscriptionModel;
 use InetStudio\Subscription\Managers\SubscriptionManager;
 use InetStudio\Subscription\Services\SubscriptionService;
 use InetStudio\Subscription\Console\Commands\SetupCommand;
 use InetStudio\Subscription\Observers\SubscriptionObserver;
-use InetStudio\AdminPanel\Events\Auth\SocialRegisteredEvent;
 use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
 use InetStudio\Subscription\Listeners\AttachUserToSubscriptionListener;
 
@@ -117,8 +115,8 @@ class SubscriptionServiceProvider extends ServiceProvider
      */
     protected function registerEvents(): void
     {
-        Event::listen(ActivatedEvent::class, AttachUserToSubscriptionListener::class);
-        Event::listen(SocialRegisteredEvent::class, AttachUserToSubscriptionListener::class);
+        Event::listen(app()->make('InetStudio\ACL\Activations\Contracts\Events\Front\ActivatedEventContract'), AttachUserToSubscriptionListener::class);
+        Event::listen(app()->make('InetStudio\ACL\Users\Contracts\Events\Front\SocialRegisteredEventContract'), AttachUserToSubscriptionListener::class);
     }
 
     /**
