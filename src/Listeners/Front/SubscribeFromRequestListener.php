@@ -35,6 +35,8 @@ class SubscribeFromRequestListener implements SubscribeFromRequestListenerContra
     {
         $request = request();
 
-        $this->services['subscription']->subscribeByRequest($request);
+        if ($request->filled('subscribe-agree')) {
+            $this->services['subscription']->subscribeByRequest($request);
+        }
     }
 }
