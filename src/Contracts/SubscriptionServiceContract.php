@@ -5,6 +5,9 @@ namespace InetStudio\Subscription\Contracts;
 use Illuminate\Http\Request;
 use InetStudio\Subscription\Models\SubscriptionModel;
 
+/**
+ * Interface SubscriptionServiceContract.
+ */
 interface SubscriptionServiceContract
 {
     /**

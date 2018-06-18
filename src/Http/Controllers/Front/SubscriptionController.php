@@ -21,7 +21,7 @@ class SubscriptionController extends Controller
      */
     public function subscribe(SubscribeRequest $request): JsonResponse
     {
-        $subscriptionService = app()->make('SubscriptionService');
+        $subscriptionService = app()->make('InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract');
 
         return response()->json([
             'success' => $subscriptionService->subscribeByRequest($request),

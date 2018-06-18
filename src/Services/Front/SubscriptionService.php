@@ -1,16 +1,21 @@
 <?php
 
-namespace InetStudio\Subscription\Services;
+namespace InetStudio\Subscription\Services\Front;
 
 use Illuminate\Support\Arr;
 use InetStudio\Subscription\Models\SubscriptionModel;
+use InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract;
 
-class SubscriptionService
+/**
+ * Class SubscriptionService.
+ */
+class SubscriptionService implements SubscriptionServiceContract
 {
     /**
      * Сохраняем подписчика.
      *
      * @param $request
+     *
      * @return array
      */
     public function subscribeByRequest($request): array
@@ -24,6 +29,7 @@ class SubscriptionService
      * Сохраняем подписчика.
      *
      * @param array $subscriptionData
+     *
      * @return array
      */
     public function subscribeByData(array $subscriptionData): array
@@ -53,6 +59,7 @@ class SubscriptionService
      * Отписываем пользователя.
      *
      * @param $request
+     *
      * @return array
      */
     public function unsubscribeByRequest($request): array
@@ -66,6 +73,7 @@ class SubscriptionService
      * Отписываем пользователя.
      *
      * @param array $subscriptionData
+     *
      * @return array
      */
     public function unsubscribeByData(array $subscriptionData): array
@@ -94,6 +102,7 @@ class SubscriptionService
      * Получаем информацию по подписке из запроса.
      *
      * @param $request
+     *
      * @return array
      */
     private function getRequestSubscriptionData($request)
@@ -116,6 +125,7 @@ class SubscriptionService
      * Получаем подписчика.
      *
      * @param string $email
+     *
      * @return SubscriptionModel|null
      */
     private function getSubscriber($email): ?SubscriptionModel
@@ -129,6 +139,7 @@ class SubscriptionService
      * Восстанавливаем подписчика.
      *
      * @param $subscriber
+     *
      * @return SubscriptionModel|null
      */
     private function restoreSubscriber($subscriber): ?SubscriptionModel

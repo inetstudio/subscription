@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use InetStudio\Subscription\Models\SubscriptionModel;
 use InetStudio\Subscription\Managers\SubscriptionManager;
-use InetStudio\Subscription\Services\SubscriptionService;
 use InetStudio\Subscription\Console\Commands\SetupCommand;
 use InetStudio\Subscription\Observers\SubscriptionObserver;
 use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
@@ -156,6 +155,7 @@ class SubscriptionServiceProvider extends ServiceProvider
             return (new SubscriptionManager($app))->with($driver);
         });
 
-        $this->app->bind('SubscriptionService', SubscriptionService::class);
+        $this->app->bind('InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract', 'InetStudio\Subscription\Services\Front\SubscriptionService');
+        $this->app->bind('InetStudio\Subscription\Contracts\Listeners\Front\SubscribeFromRequestListenerContract', 'InetStudio\Subscription\Listeners\Front\SubscribeFromRequestListener');
     }
 }
