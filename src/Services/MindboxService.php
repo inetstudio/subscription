@@ -77,7 +77,7 @@ class MindboxService implements SubscriptionServiceContract
         if (isset($requestData['email'])) {
             $email = $requestData['email'];
 
-            $user = $usersRepository->searchItems([
+            $users = $usersRepository->searchItems([
                 ['email', '=', $email],
             ]);
             $subscribers = SubscriptionModel::withTrashed()->where('email', $email)->get();
@@ -95,7 +95,7 @@ class MindboxService implements SubscriptionServiceContract
 
             $subscriber->email = $email;
             $subscriber->status = $requestData['status'];
-            $subscriber->status_id = ($user) ? $user->id : 0;
+            $subscriber->user_id = ($users->count() > 0) ? $users->first()->id : 0;
             $subscriber->additional_info = [];
             $subscriber->save();
         }
