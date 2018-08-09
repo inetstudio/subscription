@@ -4,10 +4,12 @@ namespace InetStudio\Subscription\Managers;
 
 use Illuminate\Support\Manager;
 use InetStudio\Subscription\Services\LocalService;
-use InetStudio\Subscription\Services\MailgunService;
 use InetStudio\Subscription\Services\MindboxService;
 use InetStudio\Subscription\Services\MailchimpService;
 
+/**
+ * Class SubscriptionManager.
+ */
 class SubscriptionManager extends Manager
 {
     /**
@@ -35,6 +37,8 @@ class SubscriptionManager extends Manager
      * Возвращаем сервис для интеграции с Mailchimp.
      *
      * @return MailchimpService
+     *
+     * @throws \Exception
      */
     protected function createMailchimpDriver(): MailchimpService
     {
@@ -44,27 +48,13 @@ class SubscriptionManager extends Manager
     }
 
     /**
-     * Возвращаем сервис для интеграции с Mailgun.
-     *
-     * @return MailgunService
-     */
-    protected function createMailgunDriver(): MailgunService
-    {
-        $config = $this->app['config']['subscription.mailgun'];
-
-        return new MailgunService($config);
-    }
-
-    /**
      * Возвращаем сервис для интеграции с Mindbox.
      *
      * @return MindboxService
      */
     protected function createMindboxDriver(): MindboxService
     {
-        $config = $this->app['config']['subscription.mindbox'];
-
-        return new MindboxService($config);
+        return new MindboxService();
     }
 
     /**

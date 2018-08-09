@@ -26,7 +26,10 @@ class MailchimpService implements SubscriptionServiceContract
 
     /**
      * MailchimpService constructor.
+     *
      * @param array $config
+     *
+     * @throws \Exception
      */
     public function __construct(array $config)
     {
@@ -197,7 +200,10 @@ class MailchimpService implements SubscriptionServiceContract
      * Синхронизируем локальные данные с сервисом подписок.
      *
      * @param Request $request
+     *
      * @return bool
+     *
+     * @throws \Exception
      */
     public function sync(Request $request): bool
     {
