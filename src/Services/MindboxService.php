@@ -4,6 +4,7 @@ namespace InetStudio\Subscription\Services;
 
 use Illuminate\Http\Request;
 use InetStudio\Subscription\Models\SubscriptionModel;
+use InetStudio\ACL\Users\Contracts\Models\UserModelContract;
 use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
 
 /**
@@ -71,11 +72,14 @@ class MindboxService implements SubscriptionServiceContract
     public function sync(Request $request): bool
     {
         $requestData = $request->all();
+        $usersRepository = app()->make('InetStudio\ACL\Users\Contracts\Repositories\UsersRepositoryContract');
 
         if (isset($requestData['email'])) {
             $email = $requestData['email'];
 
-            $user = $this->getUser($email);
+            $user = $usersRepository->searchItems([
+                ['email', '=', $email],
+            ]);
             $subscribers = SubscriptionModel::withTrashed()->where('email', $email)->get();
             SubscriptionModel::flushEventListeners();
 
