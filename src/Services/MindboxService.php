@@ -91,6 +91,7 @@ class MindboxService implements SubscriptionServiceContract
                 }
             } else {
                 $subscriber = new SubscriptionModel();
+                $subscriber->additional_info = [];
             }
 
             $subscriber->email = $email;
