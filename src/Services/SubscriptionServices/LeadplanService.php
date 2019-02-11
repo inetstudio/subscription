@@ -106,7 +106,7 @@ class LeadplanService implements SubscriptionServiceContract
             ];
 
             if (! $itemId) {
-                $data['additional_info'] = [];
+                $data['additional_info'] = $requestData['additional_info'];
             }
 
             $subscriptionRepository->save($data, $itemId);

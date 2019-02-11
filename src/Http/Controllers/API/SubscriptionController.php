@@ -5,7 +5,6 @@ namespace InetStudio\Subscription\Http\Controllers\API;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use InetStudio\Subscription\Managers\SubscriptionManager;
 
 /**
  * Class SubscriptionController.
@@ -22,7 +21,9 @@ class SubscriptionController extends Controller
      */
     public function sync(Request $request, string $service): JsonResponse
     {
-        $subscriptionService = (new SubscriptionManager(app()))->with($service);
+        $subscriptionService = app()->makeWith('InetStudio\Subscription\Contracts\Managers\SubscriptionManagerContract', [
+            'app' => app(),
+        ])->with($service);
 
         return response()->json([
             'success' => $subscriptionService->sync($request),
