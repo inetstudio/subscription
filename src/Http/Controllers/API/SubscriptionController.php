@@ -8,9 +8,7 @@ use App\Http\Controllers\Controller;
 use InetStudio\Subscription\Managers\SubscriptionManager;
 
 /**
- * Контроллер для управления подписками (Front).
- *
- * Class SubscriptionController
+ * Class SubscriptionController.
  */
 class SubscriptionController extends Controller
 {
@@ -19,6 +17,7 @@ class SubscriptionController extends Controller
      *
      * @param Request $request
      * @param string $service
+     *
      * @return JsonResponse
      */
     public function sync(Request $request, string $service): JsonResponse

@@ -20,6 +20,7 @@
     "extra": {
       "laravel": {
         "providers": [
+          "InetStudio\\Subscription\\Providers\\SubscriptionBindingsServiceProvider",
           "InetStudio\\Subscription\\Providers\\SubscriptionServiceProvider"
         ]
       }

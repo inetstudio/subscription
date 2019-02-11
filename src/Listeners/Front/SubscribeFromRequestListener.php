@@ -14,7 +14,7 @@ class SubscribeFromRequestListener implements SubscribeFromRequestListenerContra
      *
      * @var array
      */
-    private $services;
+    protected $services;
 
     /**
      * SubscribeFromRequestListener constructor.

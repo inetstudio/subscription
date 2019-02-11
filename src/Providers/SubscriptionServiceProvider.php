@@ -2,16 +2,13 @@
 
 namespace InetStudio\Subscription\Providers;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use InetStudio\Subscription\Models\SubscriptionModel;
-use InetStudio\Subscription\Managers\SubscriptionManager;
-use InetStudio\Subscription\Console\Commands\SetupCommand;
-use InetStudio\Subscription\Observers\SubscriptionObserver;
-use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
-use InetStudio\Subscription\Listeners\AttachUserToSubscriptionListener;
 
+/**
+ * Class SubscriptionServiceProvider.
+ */
 class SubscriptionServiceProvider extends ServiceProvider
 {
     /**
@@ -28,7 +25,6 @@ class SubscriptionServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerEvents();
         $this->registerObservers();
-        $this->registerViewComposers();
     }
 
     /**
@@ -50,7 +46,7 @@ class SubscriptionServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                SetupCommand::class,
+                'InetStudio\Subscription\Console\Commands\SetupCommand',
             ]);
         }
     }
@@ -67,7 +63,7 @@ class SubscriptionServiceProvider extends ServiceProvider
         ], 'config');
 
         if ($this->app->runningInConsole()) {
-            if (! class_exists('CreateSubscriptionTables')) {
+            if (! Schema::hasTable('subscription')) {
                 $timestamp = date('Y_m_d_His', time());
                 $this->publishes([
                     __DIR__.'/../../database/migrations/create_subscription_tables.php.stub' => database_path('migrations/'.$timestamp.'_create_subscription_tables.php'),
@@ -114,8 +110,15 @@ class SubscriptionServiceProvider extends ServiceProvider
      */
     protected function registerEvents(): void
     {
-        Event::listen('InetStudio\ACL\Activations\Contracts\Events\Front\ActivatedEventContract', AttachUserToSubscriptionListener::class);
-        Event::listen('InetStudio\ACL\Users\Contracts\Events\Front\SocialRegisteredEventContract', AttachUserToSubscriptionListener::class);
+        Event::listen(
+            'InetStudio\ACL\Activations\Contracts\Events\Front\ActivatedEventContract',
+            'InetStudio\Subscription\Contracts\Listeners\Front\AttachUserToSubscriptionListenerContract'
+        );
+
+        Event::listen(
+            'InetStudio\ACL\Users\Contracts\Events\Front\SocialRegisteredEventContract',
+            'InetStudio\Subscription\Contracts\Listeners\Front\AttachUserToSubscriptionListenerContract'
+        );
     }
 
     /**
@@ -125,21 +128,7 @@ class SubscriptionServiceProvider extends ServiceProvider
      */
     public function registerObservers(): void
     {
-        SubscriptionModel::observe(SubscriptionObserver::class);
-    }
-
-    /**
-     * Register Comments's view composers.
-     *
-     * @return void
-     */
-    public function registerViewComposers(): void
-    {
-        view()->composer('admin.module.subscription::back.partials.analytics.users.statistic', function ($view) {
-            $comments = SubscriptionModel::select(['status', DB::raw('count(*) as total')])->groupBy('status')->get();
-
-            $view->with('subscriptions', $comments);
-        });
+        $this->app->make('InetStudio\Subscription\Contracts\Models\SubscriptionModelContract')::observe($this->app->make('InetStudio\Subscription\Contracts\Observers\SubscriptionObserverContract'));
     }
 
     /**
@@ -151,11 +140,9 @@ class SubscriptionServiceProvider extends ServiceProvider
     {
         $driver = config('subscription.driver');
 
-        $this->app->singleton(SubscriptionServiceContract::class, function ($app) use ($driver) {
-            return (new SubscriptionManager($app))->with($driver);
+        $this->app->singleton('InetStudio\Subscription\Contracts\Services\SubscriptionServices\SubscriptionServiceContract', function ($app) use ($driver) {
+            return app()->makeWith('InetStudio\Subscription\Contracts\Managers\SubscriptionManagerContract', compact('app'))
+                ->with($driver);
         });
-
-        $this->app->bind('InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract', 'InetStudio\Subscription\Services\Front\SubscriptionService');
-        $this->app->bind('InetStudio\Subscription\Contracts\Listeners\Front\SubscribeFromRequestListenerContract', 'InetStudio\Subscription\Listeners\Front\SubscribeFromRequestListener');
     }
 }

@@ -7,9 +7,7 @@ use App\Http\Controllers\Controller;
 use InetStudio\Subscription\Http\Requests\Front\SubscribeRequest;
 
 /**
- * Контроллер для управления подписками (Front).
- *
- * Class SubscriptionController
+ * Class SubscriptionController.
  */
 class SubscriptionController extends Controller
 {

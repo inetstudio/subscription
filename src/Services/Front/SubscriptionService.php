@@ -3,7 +3,7 @@
 namespace InetStudio\Subscription\Services\Front;
 
 use Illuminate\Support\Arr;
-use InetStudio\Subscription\Models\SubscriptionModel;
+use InetStudio\Subscription\Contracts\Models\SubscriptionModelContract;
 use InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract;
 
 /**
@@ -11,6 +11,19 @@ use InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract
  */
 class SubscriptionService implements SubscriptionServiceContract
 {
+    /**
+     * @var mixed 
+     */
+    protected $subscriptionRepository;
+
+    /**
+     * SubscriptionService constructor.
+     */
+    public function __construct()
+    {
+        $this->subscriptionRepository = app()->make('InetStudio\Subscription\Contracts\Repositories\SubscriptionRepositoryContract');
+    }
+
     /**
      * Сохраняем подписчика.
      *
@@ -34,10 +47,10 @@ class SubscriptionService implements SubscriptionServiceContract
      */
     public function subscribeByData(array $subscriptionData): array
     {
-        $subscriber = $this->getSubscriber($subscriptionData['email']);
-        $subscriber = $this->restoreSubscriber($subscriber);
+        $item = $this->getItem($subscriptionData['email']);
+        $item = $this->restoreItem($item);
 
-        if (! $subscriber || $subscriber->status != 'subscribed') {
+        if (! $item || $item->status != 'subscribed') {
             $subscriptionData['status'] = 'pending';
 
             $message = trans('subscription::messages.pending');
@@ -45,13 +58,12 @@ class SubscriptionService implements SubscriptionServiceContract
             $message = trans('subscription::messages.update');
         }
 
-        $subscriber = SubscriptionModel::updateOrCreate([
-            'email' => $subscriptionData['email'],
-        ], $subscriptionData);
+        $itemId = $item['id'] ?? 0;
+        $this->subscriptionRepository->save($subscriptionData, $itemId);
 
         return [
             'message' => $message,
-            'subscription' => $subscriber,
+            'subscription' => $item,
         ];
     }
 
@@ -78,22 +90,23 @@ class SubscriptionService implements SubscriptionServiceContract
      */
     public function unsubscribeByData(array $subscriptionData): array
     {
-        $subscriber = $this->getSubscriber($subscriptionData['email']);
-        $subscriber = $this->restoreSubscriber($subscriber);
+        $item = $this->getItem($subscriptionData['email']);
+        $item = $this->restoreItem($item);
 
-        if ($subscriber) {
+        if ($item) {
             $subscriptionData['status'] = 'unsubscribed';
 
-            $subscriber->update($subscriptionData);
+            $itemId = $item['id'] ?? 0;
+            $this->subscriptionRepository->save($subscriptionData, $itemId);
 
             return [
                 'message' => trans('subscription::messages.unsubscribed'),
-                'subscription' => $subscriber,
+                'subscription' => $item,
             ];
         } else {
             return [
                 'message' => trans('subscription::messages.not_found'),
-                'subscription' => $subscriber,
+                'subscription' => $item,
             ];
         }
     }
@@ -105,7 +118,7 @@ class SubscriptionService implements SubscriptionServiceContract
      *
      * @return array
      */
-    private function getRequestSubscriptionData($request)
+    protected function getRequestSubscriptionData($request)
     {
         $usersService = app()->make('InetStudio\ACL\Users\Contracts\Services\Front\UsersServiceContract');
 
@@ -126,33 +139,39 @@ class SubscriptionService implements SubscriptionServiceContract
      *
      * @param string $email
      *
-     * @return SubscriptionModel|null
+     * @return SubscriptionModelContract|null
      */
-    private function getSubscriber($email): ?SubscriptionModel
+    protected function getItem(string $email): ?SubscriptionModelContract
     {
-        $subscriber = SubscriptionModel::withTrashed()->where('email', $email)->first();
+        $items = $this->subscriptionRepository->searchItems([
+            ['email', '=', $email],
+        ], [
+            'withTrashed' => true,
+        ]);
 
-        return $subscriber;
+        return $items->first();
     }
 
     /**
      * Восстанавливаем подписчика.
      *
-     * @param $subscriber
+     * @param $item
      *
-     * @return SubscriptionModel|null
+     * @return SubscriptionModelContract|null
      */
-    private function restoreSubscriber($subscriber): ?SubscriptionModel
+    protected function restoreItem($item): ?SubscriptionModelContract
     {
-        if ($subscriber && $subscriber->trashed()) {
-            $dispatcher = SubscriptionModel::getEventDispatcher();
-            SubscriptionModel::unsetEventDispatcher();
+        if ($item && $item->trashed()) {
+            $model = $this->subscriptionRepository->getModel();
 
-            $subscriber->restore();
+            $dispatcher = $model::getEventDispatcher();
+            $model::unsetEventDispatcher();
 
-            SubscriptionModel::setEventDispatcher($dispatcher);
+            $item->restore();
+
+            $model::setEventDispatcher($dispatcher);
         }
 
-        return $subscriber;
+        return $item;
     }
 }

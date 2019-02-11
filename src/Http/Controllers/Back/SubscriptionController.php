@@ -2,85 +2,90 @@
 
 namespace InetStudio\Subscription\Http\Controllers\Back;
 
-use Illuminate\View\View;
-use Yajra\DataTables\DataTables;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use InetStudio\Subscription\Models\SubscriptionModel;
-use InetStudio\Subscription\Transformers\SubscriptionTransformer;
-use InetStudio\AdminPanel\Http\Controllers\Back\Traits\DatatablesTrait;
+use InetStudio\Subscription\Contracts\Http\Controllers\Back\SubscriptionControllerContract;
+use InetStudio\Subscription\Contracts\Http\Responses\Back\Subscription\FormResponseContract;
+use InetStudio\Subscription\Contracts\Http\Responses\Back\Subscription\IndexResponseContract;
+use InetStudio\Subscription\Contracts\Http\Responses\Back\Subscription\DestroyResponseContract;
 
 /**
- * Контроллер для управления подписками (Back).
- *
- * Class SubscriptionController
+ * Class SubscriptionController.
  */
-class SubscriptionController extends Controller
+class SubscriptionController extends Controller implements SubscriptionControllerContract
 {
-    use DatatablesTrait;
+    /**
+     * Используемые сервисы.
+     *
+     * @var array
+     */
+    protected $services;
 
     /**
-     * Список подписок.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * SubscriptionController constructor.
      */
-    public function index(): View
+    public function __construct()
     {
-        $table = $this->generateTable('subscription', 'index');
-
-        return view('admin.module.subscription::back.pages.index', compact('table'));
+        $this->services['subscription'] = app()->make('InetStudio\Subscription\Contracts\Services\Back\SubscriptionServiceContract');
+        $this->services['dataTables'] = app()->make('InetStudio\Subscription\Contracts\Services\Back\SubscriptionDataTableServiceContract');
     }
 
     /**
-     * DataTables ServerSide.
+     * Список объектов.
      *
-     * @return mixed
+     * @return IndexResponseContract
      */
-    public function data()
+    public function index(): IndexResponseContract
     {
-        $items = SubscriptionModel::query();
+        $table = $this->services['dataTables']->html();
 
-        return DataTables::of($items)
-            ->setTransformer(new SubscriptionTransformer)
-            ->rawColumns(['status', 'actions'])
-            ->make();
-    }
-    
-    /**
-     * Редактирование подписки.
-     *
-     * @param null $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function edit($id = null): View
-    {
-        if (! is_null($id) && $id > 0 && $item = SubscriptionModel::find($id)) {
-            return view('admin.module.subscription::back.pages.form', [
-                'item' => $item,
-            ]);
-        } else {
-            abort(404);
-        }
+        return app()->makeWith(IndexResponseContract::class, [
+            'data' => compact('table'),
+        ]);
     }
 
     /**
-     * Удаление подписки.
+     * Добавление объекта.
      *
-     * @param null $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return FormResponseContract
      */
-    public function destroy($id = null): JsonResponse
+    public function create(): FormResponseContract
     {
-        if (! is_null($id) && $id > 0 && $item = SubscriptionModel::find($id)) {
-            $item->delete();
+        $item = $this->services['subscription']->getItemByID();
 
-            return response()->json([
-                'success' => true,
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-            ]);
-        }
+        return app()->makeWith(FormResponseContract::class, [
+            'data' => compact('item'),
+        ]);
+    }
+
+    /**
+     * Редактирование объекта.
+     *
+     * @param int $id
+     *
+     * @return FormResponseContract
+     */
+    public function edit($id = 0): FormResponseContract
+    {
+        $item = $this->services['subscription']->getItemByID($id);
+
+        return app()->makeWith(FormResponseContract::class, [
+            'data' => compact('item'),
+        ]);
+    }
+
+    /**
+     * Удаление объекта.
+     *
+     * @param int $id
+     *
+     * @return DestroyResponseContract
+     */
+    public function destroy(int $id = 0): DestroyResponseContract
+    {
+        $result = $this->services['subscription']->destroy($id);
+
+        return app()->makeWith(DestroyResponseContract::class, [
+            'result' => ($result === null) ? false : $result,
+        ]);
     }
 }

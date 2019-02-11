@@ -5,17 +5,20 @@ namespace InetStudio\Subscription\Managers;
 use Illuminate\Support\Manager;
 use InetStudio\Subscription\Services\LocalService;
 use InetStudio\Subscription\Services\MindboxService;
+use InetStudio\Subscription\Services\LeadplanService;
 use InetStudio\Subscription\Services\MailchimpService;
+use InetStudio\Subscription\Contracts\Managers\SubscriptionManagerContract;
 
 /**
  * Class SubscriptionManager.
  */
-class SubscriptionManager extends Manager
+class SubscriptionManager extends Manager implements SubscriptionManagerContract
 {
     /**
      * Возвращаем сервис подписки.
      *
      * @param string $driver
+     *
      * @return mixed
      */
     public function with($driver)
@@ -55,6 +58,16 @@ class SubscriptionManager extends Manager
     protected function createMindboxDriver(): MindboxService
     {
         return new MindboxService();
+    }
+
+    /**
+     * Возвращаем сервис для интеграции с Leadplan.
+     *
+     * @return LeadplanService
+     */
+    protected function createLeadplanDriver(): LeadplanService
+    {
+        return new LeadplanService();
     }
 
     /**

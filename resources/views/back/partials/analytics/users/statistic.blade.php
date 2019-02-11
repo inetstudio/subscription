@@ -1,17 +1,9 @@
-@php
-    $colors = [
-        'pending' => 'warning',
-        'subscribed' => 'primary',
-        'unsubscribed' => 'danger',
-        'cleaned' => 'default',
-    ];
+@inject('subscriptionService', 'InetStudio\Subscription\Contracts\Services\Back\SubscriptionServiceContract')
 
-    $titles = [
-        'pending' => 'Ожидают подтверждения',
-        'subscribed' => 'Активные',
-        'unsubscribed' => 'Неактивные',
-        'cleaned' => 'Некорректные адреса',
-    ];
+@php
+    $subscriptions = $subscriptionService->getSubscriptionStatisticByStatus();
+    $colors = $subscriptionService->getStatusesColors();
+    $titles = $subscriptionService->getStatusesTitles;
 @endphp
 
 <div class="ibox float-e-margins">

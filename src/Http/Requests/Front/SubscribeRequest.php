@@ -4,8 +4,12 @@ namespace InetStudio\Subscription\Http\Requests\Front;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use InetStudio\Subscription\Contracts\Http\Requests\Front\SubscribeRequestContract;
 
-class SubscribeRequest extends FormRequest
+/**
+ * Class SubscribeRequest.
+ */
+class SubscribeRequest extends FormRequest implements SubscribeRequestContract
 {
     /**
      * Определить, авторизован ли пользователь для этого запроса.

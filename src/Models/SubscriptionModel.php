@@ -6,38 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use InetStudio\ACL\Users\Models\Traits\HasUser;
 use InetStudio\AdminPanel\Models\Traits\HasJSONColumns;
+use InetStudio\Subscription\Contracts\Models\SubscriptionModelContract;
 
 /**
- * InetStudio\Subscription\Models\SubscriptionModel
- *
- * @property int $id
- * @property string $email
- * @property string $status
- * @property string $user_id
- * @property array $additional_info
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel cleaned()
- * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\InetStudio\Subscription\Models\SubscriptionModel onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel pending()
- * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel subscribed()
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel unsubscribed()
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereAdditionalInfo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereIsSubscribed($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\InetStudio\Subscription\Models\SubscriptionModel whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|\InetStudio\Subscription\Models\SubscriptionModel withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\InetStudio\Subscription\Models\SubscriptionModel withoutTrashed()
- * @mixin \Eloquent
+ * Class SubscriptionModel.
  */
-class SubscriptionModel extends Model
+class SubscriptionModel extends Model implements SubscriptionModelContract
 {
     use HasUser;
     use SoftDeletes;
@@ -80,9 +54,50 @@ class SubscriptionModel extends Model
     ];
 
     /**
+     * Сеттер атрибута email.
+     *
+     * @param $value
+     */
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = trim(strip_tags($value));
+    }
+
+    /**
+     * Сеттер атрибута status.
+     *
+     * @param $value
+     */
+    public function setStatusAttribute($value)
+    {
+        $this->attributes['status'] = trim(strip_tags($value));
+    }
+
+    /**
+     * Сеттер атрибута user_id.
+     *
+     * @param $value
+     */
+    public function setUserIdAttribute($value)
+    {
+        $this->attributes['user_id'] = (int) $value;
+    }
+
+    /**
+     * Сеттер атрибута additional_info.
+     *
+     * @param $value
+     */
+    public function setAdditionalInfoAttribute($value)
+    {
+        $this->attributes['additional_info'] = json_encode((array) $value);
+    }
+
+    /**
      * Заготовка запроса "Ожидание подтверждения".
      *
      * @param $query
+     *
      * @return mixed
      */
     public function scopePending($query)
@@ -94,6 +109,7 @@ class SubscriptionModel extends Model
      * Заготовка запроса "Подписанные пользователи".
      *
      * @param $query
+     *
      * @return mixed
      */
     public function scopeSubscribed($query)
@@ -105,6 +121,7 @@ class SubscriptionModel extends Model
      * Заготовка запроса "Отписавшиеся пользователи".
      *
      * @param $query
+     *
      * @return mixed
      */
     public function scopeUnsubscribed($query)
@@ -116,6 +133,7 @@ class SubscriptionModel extends Model
      * Заготовка запроса "Очищенные пользователи".
      *
      * @param $query
+     *
      * @return mixed
      */
     public function scopeCleaned($query)

@@ -1,9 +1,9 @@
 <?php
 
-namespace InetStudio\Subscription\Contracts;
+namespace InetStudio\Subscription\Contracts\Services\SubscriptionServices;
 
 use Illuminate\Http\Request;
-use InetStudio\Subscription\Models\SubscriptionModel;
+use InetStudio\Subscription\Contracts\Models\SubscriptionModelContract;
 
 /**
  * Interface SubscriptionServiceContract.
@@ -13,39 +13,44 @@ interface SubscriptionServiceContract
     /**
      * Подписываем пользователя на рассылку.
      *
-     * @param SubscriptionModel $subscription
+     * @param SubscriptionModelContract $item
+     *
      * @return bool
      */
-    public function subscribe(SubscriptionModel $subscription): bool;
+    public function subscribe(SubscriptionModelContract $item): bool;
 
     /**
      * Обновляем информацию подписчика.
      *
-     * @param SubscriptionModel $subscription
+     * @param SubscriptionModelContract $item
+     *
      * @return bool
      */
-    public function update(SubscriptionModel $subscription): bool;
+    public function update(SubscriptionModelContract $item): bool;
 
     /**
      * Отписываем пользователя от рассылки.
      *
-     * @param SubscriptionModel $subscription
+     * @param SubscriptionModelContract $item
+     *
      * @return bool
      */
-    public function unsubscribe(SubscriptionModel $subscription): bool;
+    public function unsubscribe(SubscriptionModelContract $item): bool;
 
     /**
      * Удаляем пользователя из листа рассылки.
      *
-     * @param SubscriptionModel $subscription
+     * @param SubscriptionModelContract $item
+     *
      * @return bool
      */
-    public function delete(SubscriptionModel $subscription): bool;
+    public function delete(SubscriptionModelContract $item): bool;
 
     /**
      * Синхронизируем локальные данные с сервисом подписок.
      *
      * @param Request $request
+     *
      * @return bool
      */
     public function sync(Request $request): bool;

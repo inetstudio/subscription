@@ -3,18 +3,22 @@
 namespace InetStudio\Subscription\Services;
 
 use Illuminate\Http\Request;
-use InetStudio\Subscription\Models\SubscriptionModel;
-use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
+use InetStudio\Subscription\Contracts\Models\SubscriptionModelContract;
+use InetStudio\Subscription\Contracts\Services\SubscriptionServices\SubscriptionServiceContract;
 
+/**
+ * Class LocalService.
+ */
 class LocalService implements SubscriptionServiceContract
 {
     /**
      * Подписываем пользователя на рассылку.
      *
-     * @param SubscriptionModel $subscription
+     * @param SubscriptionModelContract $item
+     *
      * @return bool
      */
-    public function subscribe(SubscriptionModel $subscription): bool
+    public function subscribe(SubscriptionModelContract $item): bool
     {
         return true;
     }
@@ -22,10 +26,11 @@ class LocalService implements SubscriptionServiceContract
     /**
      * Обновляем информацию подписчика.
      *
-     * @param SubscriptionModel $subscription
+     * @param SubscriptionModelContract $item
+     *
      * @return bool
      */
-    public function update(SubscriptionModel $subscription): bool
+    public function update(SubscriptionModelContract $item): bool
     {
         return true;
     }
@@ -33,10 +38,11 @@ class LocalService implements SubscriptionServiceContract
     /**
      * Отписываем пользователя от рассылки.
      *
-     * @param SubscriptionModel $subscription
+     * @param SubscriptionModelContract $item
+     *
      * @return bool
      */
-    public function unsubscribe(SubscriptionModel $subscription): bool
+    public function unsubscribe(SubscriptionModelContract $item): bool
     {
         return true;
     }
@@ -44,10 +50,11 @@ class LocalService implements SubscriptionServiceContract
     /**
      * Удаляем пользователя из листа рассылки.
      *
-     * @param SubscriptionModel $subscription
+     * @param SubscriptionModelContract $item
+     *
      * @return bool
      */
-    public function delete(SubscriptionModel $subscription): bool
+    public function delete(SubscriptionModelContract $item): bool
     {
         return true;
     }
@@ -56,6 +63,7 @@ class LocalService implements SubscriptionServiceContract
      * Синхронизируем локальные данные с сервисом подписок.
      *
      * @param Request $request
+     *
      * @return bool
      */
     public function sync(Request $request): bool

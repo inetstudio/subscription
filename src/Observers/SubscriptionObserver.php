@@ -2,64 +2,71 @@
 
 namespace InetStudio\Subscription\Observers;
 
-use InetStudio\Subscription\Models\SubscriptionModel;
-use InetStudio\Subscription\Contracts\SubscriptionServiceContract;
+use InetStudio\Subscription\Contracts\Models\SubscriptionModelContract;
+use InetStudio\Subscription\Contracts\Observers\SubscriptionObserverContract;
 
-class SubscriptionObserver
+/**
+ * Class SubscriptionObserver.
+ */
+class SubscriptionObserver implements SubscriptionObserverContract
 {
+    /**
+     * Сервис подписок.
+     *
+     * @var
+     */
     protected $subscriptionService;
 
     /**
      * SubscriptionObserver constructor.
-     * @param SubscriptionServiceContract $subscriptionService
      */
-    public function __construct(SubscriptionServiceContract $subscriptionService)
+    public function __construct()
     {
-        $this->subscriptionService = $subscriptionService;
+        $this->subscriptionService = app()->make('InetStudio\Subscription\Contracts\Services\SubscriptionServices\SubscriptionServiceContract');
     }
 
     /**
      * Событие "объект подписки создан".
      *
-     * @param SubscriptionModel $subscription
+     * @param SubscriptionModelContract $item
      */
-    public function created(SubscriptionModel $subscription): void
+    public function created(SubscriptionModelContract $item): void
     {
-        if (! $subscription->trashed() ) {
-            $this->subscriptionService->subscribe($subscription);
+        if (! $item->trashed() ) {
+            $this->subscriptionService->subscribe($item);
         }
     }
 
     /**
      * Событие "объект подписки обновляется".
      *
-     * @param SubscriptionModel $subscription
+     * @param SubscriptionModelContract $item
      */
-    public function updating(SubscriptionModel $subscription): void
+    public function updating(SubscriptionModelContract $item): void
     {
-        if (! $subscription->trashed() ) {
-            $this->subscriptionService->update($subscription);
+        if (! $item->trashed() ) {
+            $this->subscriptionService->update($item);
         }
     }
 
     /**
      * Событие "объект подписки удаляется".
      *
-     * @param SubscriptionModel $subscription
+     * @param SubscriptionModelContract $item
      */
-    public function deleting(SubscriptionModel $subscription): void
+    public function deleting(SubscriptionModelContract $item): void
     {
-        $this->subscriptionService->delete($subscription);
+        $this->subscriptionService->delete($item);
     }
 
     /**
      * Событие "объект подписки удален".
      *
-     * @param SubscriptionModel $subscription
+     * @param SubscriptionModelContract $item
      */
-    public function deleted(SubscriptionModel $subscription): void
+    public function deleted(SubscriptionModelContract $item): void
     {
-        $subscription->status = 'deleted';
-        $subscription->save();
+        $item->status = 'deleted';
+        $item->save();
     }
 }
