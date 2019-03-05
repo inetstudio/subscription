@@ -5,7 +5,7 @@ namespace InetStudio\Subscription\Services\Back;
 use League\Fractal\Manager;
 use Illuminate\Support\Facades\DB;
 use League\Fractal\Serializer\DataArraySerializer;
-use InetStudio\AdminPanel\Services\Back\BaseService;
+use InetStudio\AdminPanel\Base\Services\Back\BaseService;
 use InetStudio\Subscription\Contracts\Services\Back\SubscriptionServiceContract;
 
 /**
@@ -32,7 +32,7 @@ class SubscriptionService extends BaseService implements SubscriptionServiceCont
      */
     public function __construct()
     {
-        parent::__construct(app()->make('InetStudio\Subscription\Contracts\Repositories\SubscriptionRepositoryContract'));
+        parent::__construct(app()->make('InetStudio\Subscription\Contracts\Models\SubscriptionModelContract'));
     }
 
     /**
@@ -45,7 +45,7 @@ class SubscriptionService extends BaseService implements SubscriptionServiceCont
      */
     public function getSuggestions(string $search, $type): array
     {
-        $items = $this->repository->searchItems([['email', 'LIKE', '%'.$search.'%']]);
+        $items = $this->model::where([['email', 'LIKE', '%'.$search.'%']]);
 
         $resource = (app()->makeWith('InetStudio\Subscription\Contracts\Transformers\Back\SuggestionTransformerContract', [
             'type' => $type,
@@ -72,8 +72,7 @@ class SubscriptionService extends BaseService implements SubscriptionServiceCont
      */
     public function getSubscriptionStatisticByStatus()
     {
-        $subscriptions = $this->repository->getItemsQuery()
-            ->select(['status', DB::raw('count(*) as total')])
+        $subscriptions = $this->model::select(['status', DB::raw('count(*) as total')])
             ->groupBy('status')
             ->get();
 

@@ -19,14 +19,16 @@ class AttachUserToSubscriptionListener implements AttachUserToSubscriptionListen
      */
     public function handle($event): void
     {
-        $subscriptionRepository = app()->make('InetStudio\Subscription\Contracts\Repositories\SubscriptionRepositoryContract');
+        $subscriptionService = app()->make('InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract');
 
         $user = $event->user;
 
-        $items = $subscriptionRepository->searchItems([
-            ['email', '=', $user->email],
-            ['user_id', '=', 0],
-        ]);
+        $items = $subscriptionService->model::withTrashed()
+            ->where([
+                ['email', '=', $user->email],
+                ['user_id', '=', 0],
+            ])
+            ->get();
 
         foreach ($items as $item) {
             $additionalInfo = $item['additional_info'];
@@ -38,7 +40,7 @@ class AttachUserToSubscriptionListener implements AttachUserToSubscriptionListen
                 'additional_info' => $additionalInfo,
             ];
 
-            $subscriptionRepository->save($data, $itemId);
+            $subscriptionService->saveModel($data, $itemId);
         }
     }
 }

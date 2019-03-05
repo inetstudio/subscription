@@ -1,6 +1,6 @@
 <?php
 
-namespace InetStudio\Subscription\Contracts\Http\Responses\Back\Subscription;
+namespace InetStudio\Subscription\Contracts\Http\Responses\Back\Resource;
 
 /**
  * Interface IndexResponseContract.

@@ -70,7 +70,7 @@ class LeadplanService implements SubscriptionServiceContract
      */
     public function sync(Request $request): bool
     {
-        $subscriptionRepository = app()->make('InetStudio\Subscription\Contracts\Repositories\SubscriptionRepositoryContract');
+        $subscriptionService = app()->make('InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract');
         $usersRepository = app()->make('InetStudio\ACL\Users\Contracts\Repositories\UsersRepositoryContract');
 
         $requestData = $request->all();
@@ -82,13 +82,13 @@ class LeadplanService implements SubscriptionServiceContract
                 ['email', '=', $email],
             ]);
 
-            $items = $subscriptionRepository->searchItems([
-                ['email', '=', $email],
-            ], [
-                'withTrashed' => true,
-            ]);
+            $items = $subscriptionService->model::withTrashed()
+                ->where([
+                    ['email', '=', $email],
+                ])
+                ->get();
 
-            $subscriptionRepository->getModel()::flushEventListeners();
+            $subscriptionService->model::flushEventListeners();
 
             if ($items->count() > 0) {
                 $item = $items->first();
@@ -101,15 +101,25 @@ class LeadplanService implements SubscriptionServiceContract
             $itemId = $item['id'] ?? 0;
             $data = [
                 'email' => $email,
-                'status' => $requestData['status'],
                 'user_id' => ($users->count() > 0) ? $users->first()->id : 0,
             ];
 
-            if (! $itemId) {
-                $data['additional_info'] = $requestData['additional_info'];
+            if (isset($requestData['status'])) {
+                $data['status'] = $requestData['status'];
             }
 
-            $subscriptionRepository->save($data, $itemId);
+            if (isset($requestData['additional_info'])) {
+                $currentData = (isset($item)) ? $item->additional_info : [];
+                $data['additional_info'] = array_merge_recursive($currentData, $requestData['additional_info']);
+            }
+
+            $item = $subscriptionService->saveModel($data, $itemId);
+
+            if ($itemId == 0) {
+                event(app()->makeWith('InetStudio\Subscription\Contracts\Events\Front\NewSubscriberSyncEventContract', [
+                    'object' => $item,
+                ]));
+            }
         }
 
         return true;

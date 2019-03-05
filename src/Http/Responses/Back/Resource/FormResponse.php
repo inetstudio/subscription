@@ -1,10 +1,10 @@
 <?php
 
-namespace InetStudio\Subscription\Http\Responses\Back\Subscription;
+namespace InetStudio\Subscription\Http\Responses\Back\Resource;
 
 use Illuminate\View\View;
 use Illuminate\Contracts\Support\Responsable;
-use InetStudio\Subscription\Contracts\Http\Responses\Back\Subscription\FormResponseContract;
+use InetStudio\Subscription\Contracts\Http\Responses\Back\Resource\FormResponseContract;
 
 /**
  * Class FormResponse.

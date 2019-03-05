@@ -19,7 +19,6 @@ class SubscriptionBindingsServiceProvider extends ServiceProvider
     */
     public $bindings = [
         'InetStudio\Subscription\Contracts\Managers\SubscriptionManagerContract' => 'InetStudio\Subscription\Managers\SubscriptionManager',
-        'InetStudio\Subscription\Contracts\Repositories\SubscriptionRepositoryContract' => 'InetStudio\Subscription\Repositories\SubscriptionRepository',
         'InetStudio\Subscription\Contracts\Models\SubscriptionModelContract' => 'InetStudio\Subscription\Models\SubscriptionModel',
         'InetStudio\Subscription\Contracts\Transformers\Back\SubscriptionTransformerContract' => 'InetStudio\Subscription\Transformers\Back\SubscriptionTransformer',
         'InetStudio\Subscription\Contracts\Transformers\Back\SuggestionTransformerContract' => 'InetStudio\Subscription\Transformers\Back\SuggestionTransformer',
@@ -27,6 +26,7 @@ class SubscriptionBindingsServiceProvider extends ServiceProvider
         'InetStudio\Subscription\Contracts\Http\Responses\Back\Subscription\IndexResponseContract' => 'InetStudio\Subscription\Http\Responses\Back\Subscription\IndexResponse',
         'InetStudio\Subscription\Contracts\Http\Responses\Back\Subscription\FormResponseContract' => 'InetStudio\Subscription\Http\Responses\Back\Subscription\FormResponse',
         'InetStudio\Subscription\Contracts\Http\Responses\Back\Utility\SuggestionsResponseContract' => 'InetStudio\Subscription\Http\Responses\Back\Utility\SuggestionsResponse',
+        'InetStudio\Subscription\Contracts\Http\Responses\Front\SubscribeResponseContract' => 'InetStudio\Subscription\Http\Responses\Front\SubscribeResponse',
         'InetStudio\Subscription\Contracts\Http\Requests\Front\SubscribeRequestContract' => 'InetStudio\Subscription\Http\Requests\Front\SubscribeRequest',
         'InetStudio\Subscription\Contracts\Http\Controllers\Back\SubscriptionControllerContract' => 'InetStudio\Subscription\Http\Controllers\Back\SubscriptionController',
         'InetStudio\Subscription\Contracts\Http\Controllers\Back\SubscriptionUtilityControllerContract' => 'InetStudio\Subscription\Http\Controllers\Back\SubscriptionUtilityController',
@@ -36,6 +36,7 @@ class SubscriptionBindingsServiceProvider extends ServiceProvider
         'InetStudio\Subscription\Contracts\Events\Front\EmailDeletedEventContract' => 'InetStudio\Subscription\Events\Front\EmailDeletedEvent',
         'InetStudio\Subscription\Contracts\Events\Front\EmailPendingEventContract' => 'InetStudio\Subscription\Events\Front\EmailPendingEvent',
         'InetStudio\Subscription\Contracts\Events\Front\EmailSubscribedEventContract' => 'InetStudio\Subscription\Events\Front\EmailSubscribedEvent',
+        'InetStudio\Subscription\Contracts\Events\Front\NewSubscriberSyncEventContract' => 'InetStudio\Subscription\Events\Front\NewSubscriberSyncEvent',
         'InetStudio\Subscription\Contracts\Observers\SubscriptionObserverContract' => 'InetStudio\Subscription\Observers\SubscriptionObserver',
         'InetStudio\Subscription\Contracts\Listeners\Front\SubscribeFromRequestListenerContract' => 'InetStudio\Subscription\Listeners\Front\SubscribeFromRequestListener',
         'InetStudio\Subscription\Contracts\Listeners\Front\AttachUserToSubscriptionListenerContract' => 'InetStudio\Subscription\Listeners\Front\AttachUserToSubscriptionListener',

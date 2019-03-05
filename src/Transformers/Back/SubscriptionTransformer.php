@@ -6,6 +6,9 @@ use League\Fractal\TransformerAbstract;
 use InetStudio\Subscription\Contracts\Models\SubscriptionModelContract;
 use InetStudio\Subscription\Contracts\Transformers\Back\SubscriptionTransformerContract;
 
+/**
+ * Class SubscriptionTransformer.
+ */
 class SubscriptionTransformer extends TransformerAbstract implements SubscriptionTransformerContract
 {
     /**

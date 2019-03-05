@@ -5,7 +5,6 @@ namespace InetStudio\Subscription\Services\Back;
 use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Services\DataTable;
-use InetStudio\Subscription\Contracts\Repositories\SubscriptionRepositoryContract;
 use InetStudio\Subscription\Contracts\Services\Back\SubscriptionDataTableServiceContract;
 
 /**
@@ -14,18 +13,16 @@ use InetStudio\Subscription\Contracts\Services\Back\SubscriptionDataTableService
 class SubscriptionDataTableService extends DataTable implements SubscriptionDataTableServiceContract
 {
     /**
-     * @var SubscriptionRepositoryContract
+     * @var mixed SubscriptionModelContract
      */
-    protected $repository;
+    public $model;
 
     /**
-     * SubscriptionDataTableService constructor.
-     *
-     * @param SubscriptionRepositoryContract $repository
+     * CommentsDataTableService constructor.
      */
-    public function __construct(SubscriptionRepositoryContract $repository)
+    public function __construct()
     {
-        $this->repository = $repository;
+        $this->model = app()->make('InetStudio\Subscription\Contracts\Models\SubscriptionModelContract');
     }
 
     /**
@@ -52,7 +49,7 @@ class SubscriptionDataTableService extends DataTable implements SubscriptionData
      */
     public function query()
     {
-        $query = $this->repository->getItemsQuery([
+        $query = $this->model->buildQuery([
             'columns' => ['created_at', 'updated_at'],
         ]);
 

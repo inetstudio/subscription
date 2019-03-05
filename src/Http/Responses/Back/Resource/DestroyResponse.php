@@ -1,10 +1,10 @@
 <?php
 
-namespace InetStudio\Subscription\Http\Responses\Back\Subscription;
+namespace InetStudio\Subscription\Http\Responses\Back\Resource;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Support\Responsable;
-use InetStudio\Subscription\Contracts\Http\Responses\Back\Subscription\DestroyResponseContract;
+use InetStudio\Subscription\Contracts\Http\Responses\Back\Resource\DestroyResponseContract;
 
 /**
  * Class DestroyResponse.

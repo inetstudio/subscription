@@ -3,10 +3,12 @@
 namespace InetStudio\Subscription\Http\Controllers\Back;
 
 use App\Http\Controllers\Controller;
+use InetStudio\Subscription\Contracts\Services\Back\SubscriptionServiceContract;
+use InetStudio\Subscription\Contracts\Http\Responses\Back\Resource\FormResponseContract;
+use InetStudio\Subscription\Contracts\Http\Responses\Back\Resource\IndexResponseContract;
+use InetStudio\Subscription\Contracts\Services\Back\SubscriptionDataTableServiceContract;
 use InetStudio\Subscription\Contracts\Http\Controllers\Back\SubscriptionControllerContract;
-use InetStudio\Subscription\Contracts\Http\Responses\Back\Subscription\FormResponseContract;
-use InetStudio\Subscription\Contracts\Http\Responses\Back\Subscription\IndexResponseContract;
-use InetStudio\Subscription\Contracts\Http\Responses\Back\Subscription\DestroyResponseContract;
+use InetStudio\Subscription\Contracts\Http\Responses\Back\Resource\DestroyResponseContract;
 
 /**
  * Class SubscriptionController.
@@ -14,29 +16,15 @@ use InetStudio\Subscription\Contracts\Http\Responses\Back\Subscription\DestroyRe
 class SubscriptionController extends Controller implements SubscriptionControllerContract
 {
     /**
-     * Используемые сервисы.
-     *
-     * @var array
-     */
-    protected $services;
-
-    /**
-     * SubscriptionController constructor.
-     */
-    public function __construct()
-    {
-        $this->services['subscription'] = app()->make('InetStudio\Subscription\Contracts\Services\Back\SubscriptionServiceContract');
-        $this->services['dataTables'] = app()->make('InetStudio\Subscription\Contracts\Services\Back\SubscriptionDataTableServiceContract');
-    }
-
-    /**
      * Список объектов.
      *
+     * @param SubscriptionDataTableServiceContract $dataTableService
+     * 
      * @return IndexResponseContract
      */
-    public function index(): IndexResponseContract
+    public function index(SubscriptionDataTableServiceContract $dataTableService): IndexResponseContract
     {
-        $table = $this->services['dataTables']->html();
+        $table = $dataTableService->html();
 
         return app()->makeWith(IndexResponseContract::class, [
             'data' => compact('table'),
@@ -46,11 +34,13 @@ class SubscriptionController extends Controller implements SubscriptionControlle
     /**
      * Добавление объекта.
      *
+     * @param SubscriptionServiceContract $subscriptionService
+     *
      * @return FormResponseContract
      */
-    public function create(): FormResponseContract
+    public function create(SubscriptionServiceContract $subscriptionService): FormResponseContract
     {
-        $item = $this->services['subscription']->getItemByID();
+        $item = $subscriptionService->getItemById();
 
         return app()->makeWith(FormResponseContract::class, [
             'data' => compact('item'),
@@ -60,13 +50,14 @@ class SubscriptionController extends Controller implements SubscriptionControlle
     /**
      * Редактирование объекта.
      *
+     * @param SubscriptionServiceContract $subscriptionService
      * @param int $id
      *
      * @return FormResponseContract
      */
-    public function edit($id = 0): FormResponseContract
+    public function edit(SubscriptionServiceContract $subscriptionService, int $id = 0): FormResponseContract
     {
-        $item = $this->services['subscription']->getItemByID($id);
+        $item = $subscriptionService->getItemById($id);
 
         return app()->makeWith(FormResponseContract::class, [
             'data' => compact('item'),
@@ -76,13 +67,14 @@ class SubscriptionController extends Controller implements SubscriptionControlle
     /**
      * Удаление объекта.
      *
+     * @param SubscriptionServiceContract $subscriptionService
      * @param int $id
      *
      * @return DestroyResponseContract
      */
-    public function destroy(int $id = 0): DestroyResponseContract
+    public function destroy(SubscriptionServiceContract $subscriptionService, int $id = 0): DestroyResponseContract
     {
-        $result = $this->services['subscription']->destroy($id);
+        $result = $subscriptionService->destroy($id);
 
         return app()->makeWith(DestroyResponseContract::class, [
             'result' => ($result === null) ? false : $result,

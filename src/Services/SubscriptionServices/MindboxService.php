@@ -70,7 +70,7 @@ class MindboxService implements SubscriptionServiceContract
      */
     public function sync(Request $request): bool
     {
-        $subscriptionRepository = app()->make('InetStudio\Subscription\Contracts\Repositories\SubscriptionRepositoryContract');
+        $subscriptionService = app()->make('InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract');
         $usersRepository = app()->make('InetStudio\ACL\Users\Contracts\Repositories\UsersRepositoryContract');
 
         $requestData = $request->all();
@@ -82,13 +82,13 @@ class MindboxService implements SubscriptionServiceContract
                 ['email', '=', $email],
             ]);
 
-            $items = $subscriptionRepository->searchItems([
-                ['email', '=', $email],
-            ], [
-                'withTrashed' => true,
-            ]);
+            $items = $subscriptionService->model::withTrashed()
+                ->where([
+                    ['email', '=', $email],
+                ])
+                ->get();
 
-            $subscriptionRepository->getModel()::flushEventListeners();
+            $subscriptionService->model::flushEventListeners();
 
             if ($items->count() > 0) {
                 $item = $items->first();
@@ -109,7 +109,7 @@ class MindboxService implements SubscriptionServiceContract
                 $data['additional_info'] = [];
             }
 
-            $subscriptionRepository->save($data, $itemId);
+            $subscriptionService->saveModel($data, $itemId);
         }
 
         return true;

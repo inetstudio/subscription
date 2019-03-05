@@ -3,25 +3,21 @@
 namespace InetStudio\Subscription\Services\Front;
 
 use Illuminate\Support\Arr;
+use InetStudio\AdminPanel\Base\Services\Front\BaseService;
 use InetStudio\Subscription\Contracts\Models\SubscriptionModelContract;
 use InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract;
 
 /**
  * Class SubscriptionService.
  */
-class SubscriptionService implements SubscriptionServiceContract
+class SubscriptionService extends BaseService implements SubscriptionServiceContract
 {
-    /**
-     * @var mixed 
-     */
-    protected $subscriptionRepository;
-
     /**
      * SubscriptionService constructor.
      */
     public function __construct()
     {
-        $this->subscriptionRepository = app()->make('InetStudio\Subscription\Contracts\Repositories\SubscriptionRepositoryContract');
+        parent::__construct(app()->make('InetStudio\Subscription\Contracts\Models\SubscriptionModelContract'));
     }
 
     /**
@@ -59,7 +55,7 @@ class SubscriptionService implements SubscriptionServiceContract
         }
 
         $itemId = $item['id'] ?? 0;
-        $this->subscriptionRepository->save($subscriptionData, $itemId);
+        $this->saveModel($subscriptionData, $itemId);
 
         return [
             'message' => $message,
@@ -97,7 +93,7 @@ class SubscriptionService implements SubscriptionServiceContract
             $subscriptionData['status'] = 'unsubscribed';
 
             $itemId = $item['id'] ?? 0;
-            $this->subscriptionRepository->save($subscriptionData, $itemId);
+            $this->saveModel($subscriptionData, $itemId);
 
             return [
                 'message' => trans('subscription::messages.unsubscribed'),
@@ -143,11 +139,10 @@ class SubscriptionService implements SubscriptionServiceContract
      */
     protected function getItem(string $email): ?SubscriptionModelContract
     {
-        $items = $this->subscriptionRepository->searchItems([
-            ['email', '=', $email],
-        ], [
-            'withTrashed' => true,
-        ]);
+        $items = $this->model::withTrashed()
+            ->where([
+                ['email', '=', $email],
+            ])->get();
 
         return $items->first();
     }
@@ -162,7 +157,7 @@ class SubscriptionService implements SubscriptionServiceContract
     protected function restoreItem($item): ?SubscriptionModelContract
     {
         if ($item && $item->trashed()) {
-            $model = $this->subscriptionRepository->getModel();
+            $model = $this->model;
 
             $dispatcher = $model::getEventDispatcher();
             $model::unsetEventDispatcher();

@@ -4,7 +4,8 @@ namespace InetStudio\Subscription\Http\Controllers\Back;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use InetStudio\Subscription\Http\Responses\Back\Utility\SuggestionsResponse;
+use InetStudio\Subscription\Contracts\Services\Back\SubscriptionServiceContract;
+use InetStudio\Subscription\Contracts\Http\Responses\Back\Utility\SuggestionsResponseContract;
 use InetStudio\Subscription\Contracts\Http\Controllers\Back\SubscriptionUtilityControllerContract;
 
 /**
@@ -13,38 +14,22 @@ use InetStudio\Subscription\Contracts\Http\Controllers\Back\SubscriptionUtilityC
 class SubscriptionUtilityController extends Controller implements SubscriptionUtilityControllerContract
 {
     /**
-     * Используемые сервисы.
-     *
-     * @var array
-     */
-    protected $services;
-
-    /**
-     * SubscriptionController constructor.
-     */
-    public function __construct()
-    {
-        $this->services['subscription'] = app()->make(
-            'InetStudio\Subscription\Contracts\Services\Back\SubscriptionServiceContract'
-        );
-    }
-
-    /**
      * Возвращаем статьи для поля.
      *
+     * @param SubscriptionServiceContract $subscriptionService
      * @param Request $request
      *
-     * @return SuggestionsResponse
+     * @return SuggestionsResponseContract
      */
-    public function getSuggestions(Request $request): SuggestionsResponse
+    public function getSuggestions(SubscriptionServiceContract $subscriptionService, Request $request): SuggestionsResponseContract
     {
         $search = $request->get('q');
         $type = $request->get('type') ?? '';
 
-        $suggestions = $this->services['subscription']->getSuggestions($search);
+        $suggestions = $subscriptionService->getSuggestions($search);
 
         return app()->makeWith(
-            'InetStudio\Subscription\Http\Responses\Back\Utility\SuggestionsResponse',
+            SuggestionsResponseContract::class,
             compact('suggestions', 'type')
         );
     }

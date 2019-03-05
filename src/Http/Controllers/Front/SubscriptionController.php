@@ -2,9 +2,10 @@
 
 namespace InetStudio\Subscription\Http\Controllers\Front;
 
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use InetStudio\Subscription\Http\Requests\Front\SubscribeRequest;
+use InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract;
+use InetStudio\Subscription\Contracts\Http\Requests\Front\SubscribeRequestContract;
+use InetStudio\Subscription\Contracts\Http\Responses\Front\SubscribeResponseContract;
 
 /**
  * Class SubscriptionController.
@@ -14,16 +15,15 @@ class SubscriptionController extends Controller
     /**
      * Подписка пользователя.
      *
-     * @param SubscribeRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param SubscriptionServiceContract $subscriptionService
+     * @param SubscribeRequestContract $request
+     *
+     * @return SubscribeResponseContract
      */
-    public function subscribe(SubscribeRequest $request): JsonResponse
+    public function subscribe(SubscriptionServiceContract $subscriptionService, SubscribeRequestContract $request): SubscribeResponseContract
     {
-        $subscriptionService = app()->make('InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract');
+        $result = $subscriptionService->subscribeByRequest($request);
 
-        return response()->json([
-            'success' => $subscriptionService->subscribeByRequest($request),
-            'message' => trans('subscription::messages.pending'),
-        ]);
+        return app()->makeWith(SubscribeResponseContract::class, compact('result'));
     }
 }

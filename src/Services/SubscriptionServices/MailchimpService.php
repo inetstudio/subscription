@@ -231,7 +231,7 @@ class MailchimpService implements SubscriptionServiceContract
      */
     public function sync(Request $request): bool
     {
-        $subscriptionRepository = app()->make('InetStudio\Subscription\Contracts\Repositories\SubscriptionRepositoryContract');
+        $subscriptionService = app()->make('InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract');
 
         $requestData = Webhook::receive($request->instance()->getContent());
 
@@ -239,13 +239,13 @@ class MailchimpService implements SubscriptionServiceContract
             $email = $requestData['data']['email'];
 
             $user = $this->getUser($email);
-            $items = $subscriptionRepository->searchItems([
-                ['email', '=', $email],
-            ], [
-                'withTrashed' => true,
-            ]);
+            $items = $subscriptionService->model::withTrashed()
+                ->where([
+                    ['email', '=', $email],
+                ])
+                ->get();
 
-            $subscriptionRepository->getModel()::flushEventListeners();
+            $subscriptionService->model::flushEventListeners();
 
             if ($items->count() > 0) {
                 $item = $items->first();
@@ -260,7 +260,7 @@ class MailchimpService implements SubscriptionServiceContract
             if (isset($user['id'])) {
                 if ($requestData['type'] == 'cleaned') {
 
-                    $item = $subscriptionRepository->save([
+                    $item = $subscriptionService->saveModel([
                         'status' => 'cleaned',
                     ], $itemId);
 
@@ -269,7 +269,7 @@ class MailchimpService implements SubscriptionServiceContract
                     ]));
                 } else {
 
-                    $item = $subscriptionRepository->save([
+                    $item = $subscriptionService->saveModel([
                         'email' => $email,
                         'status' => (isset($user['status'])) ? $user['status'] : 'unsubscribed',
                         'additional_info' => $this->formatAdditionalInfo($user),
@@ -282,7 +282,7 @@ class MailchimpService implements SubscriptionServiceContract
             } else {
                 if (isset($requestData['data']['action']) && $requestData['data']['action'] == 'delete') {
 
-                    $item = $subscriptionRepository->save([
+                    $item = $subscriptionService->saveModel([
                         'status' => 'deleted',
                     ], $itemId);
 

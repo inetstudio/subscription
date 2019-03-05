@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use InetStudio\ACL\Users\Models\Traits\HasUser;
 use InetStudio\AdminPanel\Models\Traits\HasJSONColumns;
 use InetStudio\Subscription\Contracts\Models\SubscriptionModelContract;
+use InetStudio\AdminPanel\Base\Models\Traits\Scopes\BuildQueryScopeTrait;
 
 /**
  * Class SubscriptionModel.
@@ -16,6 +17,7 @@ class SubscriptionModel extends Model implements SubscriptionModelContract
     use HasUser;
     use SoftDeletes;
     use HasJSONColumns;
+    use BuildQueryScopeTrait;
 
     /**
      * Связанная с моделью таблица.
@@ -52,6 +54,20 @@ class SubscriptionModel extends Model implements SubscriptionModelContract
     protected $casts = [
         'additional_info' => 'array',
     ];
+
+    /**
+     * Загрузка модели.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::$buildQueryScopeDefaults['columns'] = [
+            'id', 'email', 'status', 'user_id', 'additional_info',
+        ];
+    }
 
     /**
      * Сеттер атрибута email.
