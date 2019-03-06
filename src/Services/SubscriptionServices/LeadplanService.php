@@ -110,13 +110,17 @@ class LeadplanService implements SubscriptionServiceContract
 
             if (isset($requestData['additional_info'])) {
                 $currentData = (isset($item)) ? $item->additional_info : [];
-                $data['additional_info'] = array_merge_recursive($currentData, $requestData['additional_info']);
+                $data['additional_info'] = array_replace_recursive($currentData, $requestData['additional_info']);
             }
 
             $item = $subscriptionService->saveModel($data, $itemId);
 
             if ($itemId == 0) {
                 event(app()->makeWith('InetStudio\Subscription\Contracts\Events\Front\NewSubscriberSyncEventContract', [
+                    'object' => $item,
+                ]));
+            } else {
+                event(app()->makeWith('InetStudio\Subscription\Contracts\Events\Front\UpdateSubscriberSyncEventContract', [
                     'object' => $item,
                 ]));
             }

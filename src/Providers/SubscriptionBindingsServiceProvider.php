@@ -37,6 +37,7 @@ class SubscriptionBindingsServiceProvider extends ServiceProvider
         'InetStudio\Subscription\Contracts\Events\Front\EmailPendingEventContract' => 'InetStudio\Subscription\Events\Front\EmailPendingEvent',
         'InetStudio\Subscription\Contracts\Events\Front\EmailSubscribedEventContract' => 'InetStudio\Subscription\Events\Front\EmailSubscribedEvent',
         'InetStudio\Subscription\Contracts\Events\Front\NewSubscriberSyncEventContract' => 'InetStudio\Subscription\Events\Front\NewSubscriberSyncEvent',
+        'InetStudio\Subscription\Contracts\Events\Front\UpdateSubscriberSyncEventContract' => 'InetStudio\Subscription\Events\Front\UpdateSubscriberSyncEvent',
         'InetStudio\Subscription\Contracts\Observers\SubscriptionObserverContract' => 'InetStudio\Subscription\Observers\SubscriptionObserver',
         'InetStudio\Subscription\Contracts\Listeners\Front\SubscribeFromRequestListenerContract' => 'InetStudio\Subscription\Listeners\Front\SubscribeFromRequestListener',
         'InetStudio\Subscription\Contracts\Listeners\Front\AttachUserToSubscriptionListenerContract' => 'InetStudio\Subscription\Listeners\Front\AttachUserToSubscriptionListener',
