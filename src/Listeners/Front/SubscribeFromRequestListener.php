@@ -10,21 +10,6 @@ use InetStudio\Subscription\Contracts\Listeners\Front\SubscribeFromRequestListen
 class SubscribeFromRequestListener implements SubscribeFromRequestListenerContract
 {
     /**
-     * Используемые сервисы.
-     *
-     * @var array
-     */
-    protected $services;
-
-    /**
-     * SubscribeFromRequestListener constructor.
-     */
-    public function __construct()
-    {
-        $this->services['subscription'] = app()->make('InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract');
-    }
-
-    /**
      * Handle the event.
      *
      * @param $event
@@ -33,10 +18,12 @@ class SubscribeFromRequestListener implements SubscribeFromRequestListenerContra
      */
     public function handle($event): void
     {
+        $subscriptionsService = app()->make('InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract');
+
         $request = request();
 
         if ($request->filled('subscribe-agree')) {
-            $this->services['subscription']->subscribeByRequest($request);
+            $subscriptionsService->subscribeByRequest($request);
         }
     }
 }
