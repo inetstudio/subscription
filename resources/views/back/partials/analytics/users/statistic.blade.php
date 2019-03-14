@@ -3,7 +3,7 @@
 @php
     $subscriptions = $subscriptionService->getSubscriptionStatisticByStatus();
     $colors = $subscriptionService->getStatusesColors();
-    $titles = $subscriptionService->getStatusesTitles;
+    $titles = $subscriptionService->getStatusesTitles();
 @endphp
 
 <div class="ibox float-e-margins">
