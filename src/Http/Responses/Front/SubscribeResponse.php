@@ -12,16 +12,16 @@ use InetStudio\Subscription\Contracts\Http\Responses\Front\SubscribeResponseCont
 class SubscribeResponse implements SubscribeResponseContract, Responsable
 {
     /**
-     * @var bool
+     * @var array
      */
     protected $result;
 
     /**
      * SubscribeResponse constructor.
      *
-     * @param bool $result
+     * @param array $result
      */
-    public function __construct(bool $result)
+    public function __construct(array $result)
     {
         $this->result = $result;
     }
@@ -35,11 +35,6 @@ class SubscribeResponse implements SubscribeResponseContract, Responsable
      */
     public function toResponse($request): JsonResponse
     {
-        return response()->json([
-            'success' => $this->result,
-            'message' => ($this->result)
-                ? trans('subscription::messages.pending')
-                : trans('subscription::messages.send_fail'),
-        ]);
+        return response()->json($this->result);
     }
 }
