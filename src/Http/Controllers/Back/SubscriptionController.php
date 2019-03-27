@@ -32,7 +32,7 @@ class SubscriptionController extends Controller implements SubscriptionControlle
     }
 
     /**
-     * Добавление объекта.
+     * Создание объекта.
      *
      * @param SubscriptionServiceContract $subscriptionService
      *
