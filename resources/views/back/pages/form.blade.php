@@ -55,7 +55,6 @@
                                                     'title' => 'Email',
                                                 ],
                                                 'field' => [
-                                                    'class' => 'form-control',
                                                     'disabled' => true,
                                                 ],
                                             ]) !!}
