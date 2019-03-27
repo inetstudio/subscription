@@ -35,7 +35,7 @@
 
             <div class="ibox">
                 <div class="ibox-title">
-                    {!! Form::buttons('', '', ['back' => 'back.statuses.index']) !!}
+                    {!! Form::buttons('', '', ['back' => 'back.subscription.index']) !!}
                 </div>
                 <div class="ibox-content">
                     <div class="row">
