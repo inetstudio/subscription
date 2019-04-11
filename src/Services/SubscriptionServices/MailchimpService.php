@@ -239,13 +239,13 @@ class MailchimpService implements SubscriptionServiceContract
             $email = $requestData['data']['email'];
 
             $user = $this->getUser($email);
-            $items = $subscriptionService->model::withTrashed()
+            $items = $subscriptionService->getModel()::withTrashed()
                 ->where([
                     ['email', '=', $email],
                 ])
                 ->get();
 
-            $subscriptionService->model::flushEventListeners();
+            $subscriptionService->getModel()::flushEventListeners();
 
             if ($items->count() > 0) {
                 $item = $items->first();

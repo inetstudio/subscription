@@ -23,7 +23,7 @@ class AttachUserToSubscriptionListener implements AttachUserToSubscriptionListen
 
         $user = $event->user;
 
-        $items = $subscriptionService->model::withTrashed()
+        $items = $subscriptionService->getModel()::withTrashed()
             ->where([
                 ['email', '=', $user->email],
                 ['user_id', '=', 0],

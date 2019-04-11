@@ -3,7 +3,7 @@
 namespace InetStudio\Subscription\Services\Front;
 
 use Illuminate\Support\Arr;
-use InetStudio\AdminPanel\Base\Services\Front\BaseService;
+use InetStudio\AdminPanel\Base\Services\BaseService;
 use InetStudio\Subscription\Contracts\Models\SubscriptionModelContract;
 use InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract;
 

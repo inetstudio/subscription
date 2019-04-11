@@ -5,7 +5,7 @@ namespace InetStudio\Subscription\Services\Back;
 use League\Fractal\Manager;
 use Illuminate\Support\Facades\DB;
 use League\Fractal\Serializer\DataArraySerializer;
-use InetStudio\AdminPanel\Base\Services\Back\BaseService;
+use InetStudio\AdminPanel\Base\Services\BaseService;
 use InetStudio\Subscription\Contracts\Services\Back\SubscriptionServiceContract;
 
 /**
