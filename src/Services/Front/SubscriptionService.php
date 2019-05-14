@@ -47,9 +47,9 @@ class SubscriptionService extends BaseService implements SubscriptionServiceCont
         $item = $this->restoreItem($item);
 
         if (! $item || $item->status != 'subscribed') {
-            $subscriptionData['status'] = 'pending';
+            $subscriptionData['status'] = config('subscription.default_status', 'pending');
 
-            $message = trans('subscription::messages.pending');
+            $message = trans('subscription::messages.'.$subscriptionData['status']);
         } else {
             $message = trans('subscription::messages.update');
         }

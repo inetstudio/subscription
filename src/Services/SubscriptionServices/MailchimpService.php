@@ -175,7 +175,7 @@ class MailchimpService implements SubscriptionServiceContract
 
         $options = array_merge([
             'email_address' => $item['email'],
-            'status' => 'pending',
+            'status' => config('subscription.default_status', 'pending'),
         ], $additionalData);
 
         $this->service->post('lists/'.$this->subscribersList.'/members', $options);
