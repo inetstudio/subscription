@@ -74,8 +74,10 @@ class LeadplanService implements SubscriptionServiceContract
         $usersRepository = app()->make('InetStudio\ACL\Users\Contracts\Repositories\UsersRepositoryContract');
 
         $requestData = $request->all();
-        
-        sleep(3);
+
+        if (isset($requestData['additional_info'])) {
+            sleep(3);
+        }
 
         if (isset($requestData['email'])) {
             $email = $requestData['email'];
