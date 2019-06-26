@@ -74,6 +74,8 @@ class LeadplanService implements SubscriptionServiceContract
         $usersRepository = app()->make('InetStudio\ACL\Users\Contracts\Repositories\UsersRepositoryContract');
 
         $requestData = $request->all();
+        
+        sleep(3);
 
         if (isset($requestData['email'])) {
             $email = $requestData['email'];
@@ -82,20 +84,16 @@ class LeadplanService implements SubscriptionServiceContract
                 ['email', '=', $email],
             ]);
 
-            $items = $subscriptionService->getModel()::withTrashed()
+            $item = $subscriptionService->getModel()::withTrashed()
                 ->where([
                     ['email', '=', $email],
                 ])
-                ->get();
+                ->first();
 
             $subscriptionService->getModel()::flushEventListeners();
 
-            if ($items->count() > 0) {
-                $item = $items->first();
-
-                if ($item->trashed()) {
-                    $item->restore();
-                }
+            if ($item && $item->trashed()) {
+                $item->restore();
             }
 
             $itemId = $item['id'] ?? 0;
