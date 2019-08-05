@@ -3,7 +3,7 @@
 namespace InetStudio\Subscription\Http\Controllers\Back;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use InetStudio\AdminPanel\Base\Http\Controllers\Controller;
 use InetStudio\Subscription\Contracts\Services\Back\SubscriptionServiceContract;
 use InetStudio\Subscription\Contracts\Http\Responses\Back\Utility\SuggestionsResponseContract;
 use InetStudio\Subscription\Contracts\Http\Controllers\Back\SubscriptionUtilityControllerContract;

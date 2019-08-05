@@ -4,7 +4,7 @@ namespace InetStudio\Subscription\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
+use InetStudio\AdminPanel\Base\Http\Controllers\Controller;
 
 /**
  * Class SubscriptionController.

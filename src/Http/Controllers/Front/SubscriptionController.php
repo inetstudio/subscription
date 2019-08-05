@@ -2,7 +2,7 @@
 
 namespace InetStudio\Subscription\Http\Controllers\Front;
 
-use App\Http\Controllers\Controller;
+use InetStudio\AdminPanel\Base\Http\Controllers\Controller;
 use InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract;
 use InetStudio\Subscription\Contracts\Http\Requests\Front\SubscribeRequestContract;
 use InetStudio\Subscription\Contracts\Http\Responses\Front\SubscribeResponseContract;
