@@ -20,7 +20,7 @@ class UpdateSubscriberSyncEvent implements UpdateSubscriberSyncEventContract
 
     /**
      * UpdateSubscriberSync constructor.
-     * 
+     *
      * @param SubscriptionModelContract $object
      */
     public function __construct(SubscriptionModelContract $object)

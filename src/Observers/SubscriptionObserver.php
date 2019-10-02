@@ -32,7 +32,7 @@ class SubscriptionObserver implements SubscriptionObserverContract
      */
     public function created(SubscriptionModelContract $item): void
     {
-        if (! $item->trashed() ) {
+        if (! $item->trashed()) {
             $this->subscriptionService->subscribe($item);
         }
     }
@@ -44,7 +44,7 @@ class SubscriptionObserver implements SubscriptionObserverContract
      */
     public function updating(SubscriptionModelContract $item): void
     {
-        if (! $item->trashed() ) {
+        if (! $item->trashed()) {
             $this->subscriptionService->update($item);
         }
     }

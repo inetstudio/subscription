@@ -20,7 +20,7 @@ class NewSubscriberSyncEvent implements NewSubscriberSyncEventContract
 
     /**
      * NewSubscriberSync constructor.
-     * 
+     *
      * @param SubscriptionModelContract $object
      */
     public function __construct(SubscriptionModelContract $object)

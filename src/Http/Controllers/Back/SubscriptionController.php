@@ -19,7 +19,7 @@ class SubscriptionController extends Controller implements SubscriptionControlle
      * Список объектов.
      *
      * @param SubscriptionDataTableServiceContract $dataTableService
-     * 
+     *
      * @return IndexResponseContract
      */
     public function index(SubscriptionDataTableServiceContract $dataTableService): IndexResponseContract

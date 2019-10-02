@@ -20,7 +20,7 @@ class EmailPendingEvent implements EmailPendingEventContract
 
     /**
      * EmailPendingEvent constructor.
-     * 
+     *
      * @param SubscriptionModelContract $object
      */
     public function __construct(SubscriptionModelContract $object)

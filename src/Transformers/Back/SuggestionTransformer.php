@@ -39,7 +39,6 @@ class SuggestionTransformer extends TransformerAbstract implements SuggestionTra
     public function transform(SubscriptionModelContract $item): array
     {
         if ($this->type && $this->type == 'autocomplete') {
-
             return [
                 'value' => $item->getAttribute('email'),
                 'data' => [
