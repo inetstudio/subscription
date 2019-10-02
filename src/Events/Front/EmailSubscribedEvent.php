@@ -20,7 +20,7 @@ class EmailSubscribedEvent implements EmailSubscribedEventContract
 
     /**
      * EmailSubscribedEvent constructor.
-     * 
+     *
      * @param SubscriptionModelContract $object
      */
     public function __construct(SubscriptionModelContract $object)

@@ -20,7 +20,7 @@ class EmailDeletedEvent implements EmailDeletedEventContract
 
     /**
      * EmailDeletedEvent constructor.
-     * 
+     *
      * @param SubscriptionModelContract $object
      */
     public function __construct(SubscriptionModelContract $object)

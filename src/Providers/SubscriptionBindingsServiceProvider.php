@@ -11,8 +11,8 @@ use Illuminate\Contracts\Support\DeferrableProvider;
 class SubscriptionBindingsServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
-    * @var  array
-    */
+     * @var  array
+     */
     public $bindings = [
         'InetStudio\Subscription\Contracts\Managers\SubscriptionManagerContract' => 'InetStudio\Subscription\Managers\SubscriptionManager',
         'InetStudio\Subscription\Contracts\Models\SubscriptionModelContract' => 'InetStudio\Subscription\Models\SubscriptionModel',

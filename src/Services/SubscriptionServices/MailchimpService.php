@@ -4,8 +4,8 @@ namespace InetStudio\Subscription\Services;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use DrewM\MailChimp\Webhook;
+use Illuminate\Http\Request;
 use DrewM\MailChimp\MailChimp;
 use InetStudio\Subscription\Contracts\Models\SubscriptionModelContract;
 use InetStudio\Subscription\Contracts\Services\SubscriptionServices\SubscriptionServiceContract;
@@ -16,7 +16,7 @@ use InetStudio\Subscription\Contracts\Services\SubscriptionServices\Subscription
 class MailchimpService implements SubscriptionServiceContract
 {
     protected $service;
-    
+
     /**
      * @var string
      */
@@ -28,7 +28,7 @@ class MailchimpService implements SubscriptionServiceContract
     protected $interests;
 
     /**
-     * @var array 
+     * @var array
      */
     protected $userData = [
         'personal' => 'merge_fields',
@@ -53,7 +53,7 @@ class MailchimpService implements SubscriptionServiceContract
      * Подписываем пользователя на рассылку.
      *
      * @param SubscriptionModelContract $item
-     * 
+     *
      * @return bool
      */
     public function subscribe(SubscriptionModelContract $item): bool
@@ -69,7 +69,7 @@ class MailchimpService implements SubscriptionServiceContract
      * Обновляем информацию подписчика.
      *
      * @param SubscriptionModelContract $item
-     * 
+     *
      * @return bool
      */
     public function update(SubscriptionModelContract $item): bool
@@ -87,7 +87,7 @@ class MailchimpService implements SubscriptionServiceContract
      * Отписываем пользователя от рассылки.
      *
      * @param SubscriptionModelContract $item
-     * 
+     *
      * @return bool
      */
     public function unsubscribe(SubscriptionModelContract $item): bool
@@ -98,7 +98,7 @@ class MailchimpService implements SubscriptionServiceContract
 
         if ($exist) {
             $this->service->patch('lists/'.$this->subscribersList.'/'.$subscriberHash, [
-                'status' => 'unsubscribed'
+                'status' => 'unsubscribed',
             ]);
         }
 
@@ -113,7 +113,7 @@ class MailchimpService implements SubscriptionServiceContract
      * Удаляем пользователя из листа рассылки.
      *
      * @param SubscriptionModelContract $item
-     * 
+     *
      * @return bool
      */
     public function delete(SubscriptionModelContract $item): bool
@@ -137,7 +137,7 @@ class MailchimpService implements SubscriptionServiceContract
      * Проверяем пользователя на нахождение в листе.
      *
      * @param string $email
-     * 
+     *
      * @return bool
      */
     protected function checkUser(string $email): bool
@@ -166,7 +166,7 @@ class MailchimpService implements SubscriptionServiceContract
      * Добавляем пользователя в лист.
      *
      * @param SubscriptionModelContract $item
-     * 
+     *
      * @return bool
      */
     protected function addUser(SubscriptionModelContract $item): bool
@@ -259,7 +259,6 @@ class MailchimpService implements SubscriptionServiceContract
 
             if (isset($user['id'])) {
                 if ($requestData['type'] == 'cleaned') {
-
                     $item = $subscriptionService->saveModel([
                         'status' => 'cleaned',
                     ], $itemId);
@@ -268,7 +267,6 @@ class MailchimpService implements SubscriptionServiceContract
                         'object' => $item,
                     ]));
                 } else {
-
                     $item = $subscriptionService->saveModel([
                         'email' => $email,
                         'status' => (isset($user['status'])) ? $user['status'] : 'unsubscribed',
@@ -281,7 +279,6 @@ class MailchimpService implements SubscriptionServiceContract
                 }
             } else {
                 if (isset($requestData['data']['action']) && $requestData['data']['action'] == 'delete') {
-
                     $item = $subscriptionService->saveModel([
                         'status' => 'deleted',
                     ], $itemId);
@@ -374,7 +371,7 @@ class MailchimpService implements SubscriptionServiceContract
      * Получаем дополнительную информацию по пользователю Mailchimp.
      *
      * @param array $user
-     * 
+     *
      * @return array
      */
     protected function formatAdditionalInfo(array $user): array
