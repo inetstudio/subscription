@@ -116,7 +116,7 @@ class SubscriptionService extends BaseService implements SubscriptionServiceCont
      */
     protected function getRequestSubscriptionData($request)
     {
-        $usersService = app()->make('InetStudio\ACL\Users\Contracts\Services\Front\UsersServiceContract');
+        $usersService = app()->make('InetStudio\ACL\Users\Contracts\Services\Front\ItemsServiceContract');
 
         $email = $usersService->getUserEmail($request);
         $additional_info = ($request->filled('subscriptionData')) ? Arr::changeKeysCase($request->get('subscriptionData')) : [];

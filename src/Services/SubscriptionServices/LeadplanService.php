@@ -71,7 +71,7 @@ class LeadplanService implements SubscriptionServiceContract
     public function sync(Request $request): bool
     {
         $subscriptionService = app()->make('InetStudio\Subscription\Contracts\Services\Front\SubscriptionServiceContract');
-        $usersRepository = app()->make('InetStudio\ACL\Users\Contracts\Repositories\UsersRepositoryContract');
+        $usersService = app()->make('InetStudio\ACL\Users\Contracts\Services\Front\ItemsServiceContract');
 
         $requestData = $request->all();
 
@@ -82,9 +82,9 @@ class LeadplanService implements SubscriptionServiceContract
         if (isset($requestData['email'])) {
             $email = $requestData['email'];
 
-            $users = $usersRepository->searchItems([
+            $users = $usersService->getModel()->where([
                 ['email', '=', $email],
-            ]);
+            ])->get();
 
             $item = $subscriptionService->getModel()::withTrashed()
                 ->where([
