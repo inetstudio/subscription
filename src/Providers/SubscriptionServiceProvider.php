@@ -13,8 +13,6 @@ class SubscriptionServiceProvider extends ServiceProvider
 {
     /**
      * Загрузка сервиса.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -29,8 +27,6 @@ class SubscriptionServiceProvider extends ServiceProvider
 
     /**
      * Регистрация привязки в контейнере.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -39,8 +35,6 @@ class SubscriptionServiceProvider extends ServiceProvider
 
     /**
      * Регистрация команд.
-     *
-     * @return void
      */
     protected function registerConsoleCommands(): void
     {
@@ -53,8 +47,6 @@ class SubscriptionServiceProvider extends ServiceProvider
 
     /**
      * Регистрация ресурсов.
-     *
-     * @return void
      */
     protected function registerPublishes(): void
     {
@@ -74,8 +66,6 @@ class SubscriptionServiceProvider extends ServiceProvider
 
     /**
      * Регистрация путей.
-     *
-     * @return void
      */
     protected function registerRoutes(): void
     {
@@ -85,8 +75,6 @@ class SubscriptionServiceProvider extends ServiceProvider
 
     /**
      * Регистрация представлений.
-     *
-     * @return void
      */
     protected function registerViews(): void
     {
@@ -95,8 +83,6 @@ class SubscriptionServiceProvider extends ServiceProvider
 
     /**
      * Регистрация переводов.
-     *
-     * @return void
      */
     protected function registerTranslations(): void
     {
@@ -105,8 +91,6 @@ class SubscriptionServiceProvider extends ServiceProvider
 
     /**
      * Регистрация событий.
-     *
-     * @return void
      */
     protected function registerEvents(): void
     {
@@ -123,8 +107,6 @@ class SubscriptionServiceProvider extends ServiceProvider
 
     /**
      * Регистрация наблюдателей.
-     *
-     * @return void
      */
     public function registerObservers(): void
     {
@@ -133,8 +115,6 @@ class SubscriptionServiceProvider extends ServiceProvider
 
     /**
      * Регистрация привязок, алиасов и сторонних провайдеров сервисов.
-     *
-     * @return void
      */
     public function registerBindings(): void
     {

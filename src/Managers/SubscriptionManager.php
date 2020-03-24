@@ -3,10 +3,10 @@
 namespace InetStudio\Subscription\Managers;
 
 use Illuminate\Support\Manager;
-use InetStudio\Subscription\Services\LocalService;
-use InetStudio\Subscription\Services\MindboxService;
-use InetStudio\Subscription\Services\LeadplanService;
-use InetStudio\Subscription\Services\MailchimpService;
+use InetStudio\Subscription\Services\SubscriptionServices\LocalService;
+use InetStudio\Subscription\Services\SubscriptionServices\MindboxService;
+use InetStudio\Subscription\Services\SubscriptionServices\LeadplanService;
+use InetStudio\Subscription\Services\SubscriptionServices\MailchimpService;
 use InetStudio\Subscription\Contracts\Managers\SubscriptionManagerContract;
 
 /**

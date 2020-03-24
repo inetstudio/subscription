@@ -14,8 +14,6 @@ class AttachUserToSubscriptionListener implements AttachUserToSubscriptionListen
      * Handle the event.
      *
      * @param $event
-     *
-     * @return void
      */
     public function handle($event): void
     {

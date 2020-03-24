@@ -57,8 +57,6 @@ class SubscriptionModel extends Model implements SubscriptionModelContract
 
     /**
      * Загрузка модели.
-     *
-     * @return void
      */
     protected static function boot()
     {

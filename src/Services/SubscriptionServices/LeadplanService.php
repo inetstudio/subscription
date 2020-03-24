@@ -1,6 +1,6 @@
 <?php
 
-namespace InetStudio\Subscription\Services;
+namespace InetStudio\Subscription\Services\SubscriptionServices;
 
 use Illuminate\Http\Request;
 use InetStudio\Subscription\Contracts\Models\SubscriptionModelContract;
