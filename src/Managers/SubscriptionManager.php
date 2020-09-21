@@ -45,7 +45,7 @@ class SubscriptionManager extends Manager implements SubscriptionManagerContract
      */
     protected function createMailchimpDriver(): MailchimpService
     {
-        $config = $this->app['config']['subscription.mailchimp'];
+        $config = $this->container['config']['subscription.mailchimp'];
 
         return new MailchimpService($config);
     }
