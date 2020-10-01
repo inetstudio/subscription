@@ -7,4 +7,5 @@ namespace InetStudio\Subscription\Contracts\Listeners\Front;
  */
 interface AttachUserToSubscriptionListenerContract
 {
+    public function handle($event): void;
 }
