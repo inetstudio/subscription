@@ -2,6 +2,7 @@
 
 namespace InetStudio\Subscription\Services\Back;
 
+use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Services\DataTable;
@@ -32,7 +33,7 @@ class SubscriptionDataTableService extends DataTable implements SubscriptionData
      *
      * @throws \Exception
      */
-    public function ajax()
+    public function ajax(): JsonResponse
     {
         $transformer = app()->make('InetStudio\Subscription\Contracts\Transformers\Back\SubscriptionTransformerContract');
 
