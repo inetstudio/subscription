@@ -11,7 +11,7 @@
     ],
     "require": {
       "drewm/mailchimp-api": "^2.5",
-      "inetstudio/admin-panel": "^8.0"
+      "inetstudio/admin-panel": "^10.0"
     },
     "autoload": {
       "psr-4": {
