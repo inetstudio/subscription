@@ -55,7 +55,7 @@ class SubscriptionService extends BaseService implements SubscriptionServiceCont
         }
 
         $itemId = $item['id'] ?? 0;
-        $this->saveModel($subscriptionData, $itemId);
+        $item = $this->saveModel($subscriptionData, $itemId);
 
         return [
             'message' => $message,
@@ -93,7 +93,7 @@ class SubscriptionService extends BaseService implements SubscriptionServiceCont
             $subscriptionData['status'] = 'unsubscribed';
 
             $itemId = $item['id'] ?? 0;
-            $this->saveModel($subscriptionData, $itemId);
+            $item = $this->saveModel($subscriptionData, $itemId);
 
             return [
                 'message' => trans('subscription::messages.unsubscribed'),
