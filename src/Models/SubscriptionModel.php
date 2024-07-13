@@ -94,7 +94,7 @@ class SubscriptionModel extends Model implements SubscriptionModelContract
      */
     public function setUserIdAttribute($value)
     {
-        $this->attributes['user_id'] = (int) $value;
+        $this->attributes['user_id'] = (string) $value;
     }
 
     /**
